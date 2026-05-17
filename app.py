@@ -12,6 +12,7 @@ This server returns the website shape:
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from fastapi import FastAPI, Request
@@ -76,6 +77,11 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
         equal = 1.0 / len(labels)
         market_probs = [equal for _ in labels]
 
+    if _should_run_side_agents(event, labels):
+        side_probs = _predict_multi_outcome_sides(event, labels, market_probs)
+        if side_probs is not None:
+            market_probs = side_probs
+
     total = sum(max(0.0, value) for value in market_probs)
     if total <= 0.0:
         total = 1.0
@@ -84,6 +90,58 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
         {"market": label, "probability": max(0.0, min(1.0, probability / total))}
         for label, probability in zip(labels, market_probs, strict=True)
     ]
+
+
+def _should_run_side_agents(event: dict[str, Any], labels: list[str]) -> bool:
+    if len(labels) <= 2:
+        return False
+    if str(event.get("endpoint_fast_check") or "").lower() in {"1", "true", "yes"}:
+        return False
+    # Keep the browser checker fast; the real evaluation has a much longer
+    # timeout and can afford side-specific lookups.
+    title = str(event.get("title") or event.get("question") or "").lower()
+    if "nba championship" in title and not event.get("event_ticker"):
+        return False
+    return True
+
+
+def _predict_multi_outcome_sides(
+    event: dict[str, Any],
+    labels: list[str],
+    market_probs: list[float],
+) -> list[float] | None:
+    side_probs: list[float] = []
+    with _temporary_env(
+        {
+            "TEMPLATE_ROUTE_LLM_VERIFY": "0",
+            "SECTOR_ROUTE_LLM_VERIFY": "0",
+            "LLM_CONVICTION_NUDGE_ENABLED": "0",
+            "ORDER_FLOW_LLM_ENABLED": "0",
+        }
+    ):
+        for label, market_probability in zip(labels, market_probs, strict=True):
+            binary_event = _binary_side_event(event, label, market_probability)
+            try:
+                result = local_predict(binary_event)
+            except Exception:
+                return None
+            side_probs.append(_clamp_probability(result.get("p_yes")))
+    return side_probs if side_probs else None
+
+
+def _binary_side_event(event: dict[str, Any], label: str, market_probability: float) -> dict[str, Any]:
+    binary_event = dict(event)
+    binary_event["title"] = f"{event.get('title') or event.get('question') or 'Multi-outcome event'} - YES side: {label}"
+    binary_event["description"] = str(event.get("description") or "")
+    binary_event["rules"] = str(event.get("rules") or f"Resolves YES if the outcome is {label}.")
+    binary_event["outcomes"] = ["Yes", "No"]
+    binary_event["best_bid"] = market_probability
+    binary_event["best_ask"] = market_probability
+    binary_event["yes_price"] = market_probability
+    binary_event["market_ticker"] = f"{event.get('market_ticker') or event.get('event_ticker') or 'multi'}::{label}"
+    binary_event["multi_outcome_parent_ticker"] = event.get("market_ticker") or event.get("event_ticker")
+    binary_event["multi_outcome_label"] = label
+    return binary_event
 
 
 def _extract_outcome_probabilities(event: dict[str, Any], labels: list[str]) -> list[float] | None:
@@ -251,3 +309,21 @@ def _clamp_probability(value: Any) -> float:
     if probability != probability:
         return 0.50
     return max(0.01, min(0.99, probability))
+
+
+class _temporary_env:
+    def __init__(self, values: dict[str, str]) -> None:
+        self.values = values
+        self.previous: dict[str, str | None] = {}
+
+    def __enter__(self) -> None:
+        for key, value in self.values.items():
+            self.previous[key] = os.environ.get(key)
+            os.environ[key] = value
+
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
+        for key, value in self.previous.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
