@@ -16,6 +16,8 @@ from typing import Any
 
 from fastapi import FastAPI, Request
 
+from agents.kalshi_public import extract_bid_ask
+from agents.order_flow.kalshi_client import KalshiPublicClient
 from my_agent import predict as local_predict
 
 
@@ -69,6 +71,8 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
 
     market_probs = _extract_outcome_probabilities(event, labels)
     if market_probs is None:
+        market_probs = _fetch_kalshi_outcome_probabilities(event, labels)
+    if market_probs is None:
         equal = 1.0 / len(labels)
         market_probs = [equal for _ in labels]
 
@@ -89,6 +93,76 @@ def _extract_outcome_probabilities(event: dict[str, Any], labels: list[str]) -> 
         if extracted is not None:
             return extracted
     return None
+
+
+def _fetch_kalshi_outcome_probabilities(event: dict[str, Any], labels: list[str]) -> list[float] | None:
+    event_ticker = str(event.get("event_ticker") or "").strip()
+    market_ticker = str(event.get("market_ticker") or "").strip()
+    if not event_ticker and not market_ticker:
+        return None
+
+    client = KalshiPublicClient(timeout=8.0)
+    markets: list[dict[str, Any]] = []
+    for ticker in (event_ticker, market_ticker):
+        if not ticker:
+            continue
+        try:
+            markets.extend(client.get_json("/markets", {"event_ticker": ticker, "limit": 200}).get("markets") or [])
+        except Exception:
+            pass
+        try:
+            exact = client.get_json(f"/markets/{ticker}").get("market")
+            if isinstance(exact, dict):
+                markets.append(exact)
+        except Exception:
+            pass
+
+    if not markets:
+        return None
+
+    by_label: dict[str, float] = {}
+    for label in labels:
+        matched = _best_label_market(label, markets)
+        if matched is None:
+            return None
+        bid, ask = extract_bid_ask(matched)
+        if bid is None or ask is None or ask < bid:
+            return None
+        by_label[label] = (bid + ask) / 2.0
+    return [by_label[label] for label in labels]
+
+
+def _best_label_market(label: str, markets: list[dict[str, Any]]) -> dict[str, Any] | None:
+    label_norm = _norm(label)
+    best: tuple[int, dict[str, Any]] | None = None
+    for market in markets:
+        status = str(market.get("status") or "")
+        if status and status not in {"active", "initialized"}:
+            continue
+        yes_text = _norm(str(market.get("yes_sub_title") or ""))
+        title = _norm(str(market.get("title") or ""))
+        rules = _norm(str(market.get("rules_primary") or ""))
+        ticker = _norm(str(market.get("ticker") or ""))
+        score = 0
+        if label_norm and label_norm == yes_text:
+            score += 100
+        if label_norm and label_norm in yes_text:
+            score += 60
+        if label_norm and label_norm in title:
+            score += 25
+        if label_norm and label_norm in rules:
+            score += 25
+        if label_norm and label_norm in ticker:
+            score += 5
+        if score <= 0:
+            continue
+        if best is None or score > best[0]:
+            best = (score, market)
+    return best[1] if best else None
+
+
+def _norm(value: str) -> str:
+    return " ".join(value.lower().replace(".", " ").replace("-", " ").split())
 
 
 def _coerce_probability_collection(value: Any, labels: list[str]) -> list[float] | None:
