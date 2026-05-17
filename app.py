@@ -5,7 +5,7 @@ The hosted evaluator POSTs one event at a time to /predict.  The local
 
     {"p_yes": 0.63, "rationale": "..."}
 
-This server returns both that legacy shape and the newer website shape:
+This server returns the website shape:
 
     {"probabilities": [{"market": "Yes", "probability": 0.63}, ...]}
 """
@@ -42,13 +42,8 @@ async def predict(request: Request) -> dict[str, Any]:
         return {"probabilities": _fast_probabilities(event)}
     result = local_predict(event)
     p_yes = _clamp_probability(result.get("p_yes"))
-    rationale = str(result.get("rationale") or "")
     probabilities = _probabilities_for_outcomes(event, p_yes)
-    return {
-        "p_yes": p_yes,
-        "rationale": rationale,
-        "probabilities": probabilities,
-    }
+    return {"probabilities": probabilities}
 
 
 def _should_use_fast_endpoint_mode(event: dict[str, Any]) -> bool:
