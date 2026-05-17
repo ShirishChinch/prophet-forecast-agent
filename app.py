@@ -23,6 +23,8 @@ from my_agent import predict as local_predict
 
 
 app = FastAPI(title="Prophet Forecast Agent")
+MAX_SIDE_AGENT_OUTCOMES = 8
+KALSHI_FETCH_TIMEOUT_SECONDS = 3.0
 
 
 @app.get("/")
@@ -40,10 +42,21 @@ def health() -> dict[str, str]:
 @app.post("/predict")
 async def predict(request: Request) -> dict[str, Any]:
     """Forecast a single event and return website-compatible probabilities."""
-    event = await request.json()
+    try:
+        event = await request.json()
+    except Exception:
+        event = {}
+    if not isinstance(event, dict):
+        event = {}
+    if not event:
+        return {"probabilities": _probabilities_for_outcomes(event, 0.50)}
+
     if _should_use_fast_endpoint_mode(event):
         return {"probabilities": _fast_probabilities(event)}
-    result = local_predict(event)
+    try:
+        result = local_predict(event)
+    except Exception:
+        result = {"p_yes": 0.50}
     p_yes = _clamp_probability(result.get("p_yes"))
     probabilities = _probabilities_for_outcomes(event, p_yes)
     return {"probabilities": probabilities}
@@ -69,12 +82,13 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
     if not isinstance(outcomes, list) or not outcomes:
         outcomes = ["Yes", "No"]
     labels = [str(outcome) for outcome in outcomes]
+    mutually_exclusive = _looks_mutually_exclusive(event, labels)
 
     market_probs = _extract_outcome_probabilities(event, labels)
     if market_probs is None:
         market_probs = _fetch_kalshi_outcome_probabilities(event, labels)
     if market_probs is None:
-        equal = 1.0 / len(labels)
+        equal = 1.0 / len(labels) if mutually_exclusive else 0.50
         market_probs = [equal for _ in labels]
 
     if _should_run_side_agents(event, labels):
@@ -82,18 +96,23 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
         if side_probs is not None:
             market_probs = side_probs
 
-    total = sum(max(0.0, value) for value in market_probs)
-    if total <= 0.0:
-        total = 1.0
-        market_probs = [1.0 / len(labels) for _ in labels]
+    if mutually_exclusive:
+        total = sum(max(0.0, value) for value in market_probs)
+        if total <= 0.0:
+            market_probs = [1.0 / len(labels) for _ in labels]
+        else:
+            market_probs = [max(0.0, value) / total for value in market_probs]
+
     return [
-        {"market": label, "probability": max(0.0, min(1.0, probability / total))}
+        {"market": label, "probability": max(0.0, min(1.0, probability))}
         for label, probability in zip(labels, market_probs, strict=True)
     ]
 
 
 def _should_run_side_agents(event: dict[str, Any], labels: list[str]) -> bool:
-    if len(labels) <= 2:
+    if len(labels) <= 2 or len(labels) > MAX_SIDE_AGENT_OUTCOMES:
+        return False
+    if not _looks_mutually_exclusive(event, labels):
         return False
     if str(event.get("endpoint_fast_check") or "").lower() in {"1", "true", "yes"}:
         return False
@@ -159,11 +178,13 @@ def _fetch_kalshi_outcome_probabilities(event: dict[str, Any], labels: list[str]
     if not event_ticker and not market_ticker:
         return None
 
-    client = KalshiPublicClient(timeout=8.0)
+    client = KalshiPublicClient(timeout=KALSHI_FETCH_TIMEOUT_SECONDS)
     markets: list[dict[str, Any]] = []
+    seen_tickers: set[str] = set()
     for ticker in (event_ticker, market_ticker):
-        if not ticker:
+        if not ticker or ticker in seen_tickers or not _looks_like_kalshi_ticker(ticker):
             continue
+        seen_tickers.add(ticker)
         try:
             markets.extend(client.get_json("/markets", {"event_ticker": ticker, "limit": 200}).get("markets") or [])
         except Exception:
@@ -188,6 +209,10 @@ def _fetch_kalshi_outcome_probabilities(event: dict[str, Any], labels: list[str]
             return None
         by_label[label] = (bid + ask) / 2.0
     return [by_label[label] for label in labels]
+
+
+def _looks_like_kalshi_ticker(ticker: str) -> bool:
+    return ticker.upper().startswith("KX")
 
 
 def _best_label_market(label: str, markets: list[dict[str, Any]]) -> dict[str, Any] | None:
@@ -225,11 +250,16 @@ def _norm(value: str) -> str:
 
 def _coerce_probability_collection(value: Any, labels: list[str]) -> list[float] | None:
     if isinstance(value, dict):
+        by_label = {str(key): raw_value for key, raw_value in value.items()}
+        by_label_norm = {_norm(str(key)): raw_value for key, raw_value in value.items()}
         probs = []
         for label in labels:
-            if label not in value:
+            if label in by_label:
+                probs.append(_price_to_probability(by_label[label]))
+            elif _norm(label) in by_label_norm:
+                probs.append(_price_to_probability(by_label_norm[_norm(label)]))
+            else:
                 return None
-            probs.append(_price_to_probability(value[label]))
         return probs
     if isinstance(value, list):
         if len(value) != len(labels):
@@ -241,11 +271,67 @@ def _coerce_probability_collection(value: Any, labels: list[str]) -> list[float]
                 )
                 for item in value
             }
+            by_market_norm = {_norm(label): probability for label, probability in by_market.items()}
             if all(label in by_market for label in labels):
                 return [by_market[label] for label in labels]
+            if all(_norm(label) in by_market_norm for label in labels):
+                return [by_market_norm[_norm(label)] for label in labels]
             return None
         return [_price_to_probability(item) for item in value]
     return None
+
+
+def _looks_mutually_exclusive(event: dict[str, Any], labels: list[str]) -> bool:
+    """Infer whether outcome probabilities should be normalized to one."""
+    text = " ".join(
+        str(event.get(key) or "")
+        for key in ("title", "question", "subtitle", "description", "rules", "category")
+    ).lower()
+    if len(labels) <= 2:
+        return True
+    non_exclusive_terms = (
+        "top 2",
+        "top two",
+        "top 3",
+        "top three",
+        "top 4",
+        "top four",
+        "top 5",
+        "top five",
+        "make the playoffs",
+        "qualify for",
+        "which teams",
+        "which countries",
+        "which of the following",
+        "all that apply",
+        "multiple",
+        "at least",
+        "each of",
+    )
+    if any(term in text for term in non_exclusive_terms):
+        return False
+    exclusive_terms = (
+        "who will win",
+        "winner",
+        "champion",
+        "championship",
+        "nominee",
+        "award",
+        "election",
+        "next president",
+        "finish first",
+        "highest",
+        "lowest",
+        "which player",
+        "which team",
+        "which party",
+        "which country",
+        "range will",
+        "what range",
+    )
+    if any(term in text for term in exclusive_terms):
+        return True
+    return True
 
 
 def _price_to_probability(value: Any) -> float:
