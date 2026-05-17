@@ -255,6 +255,10 @@ class BaseForecastAgent(ABC):
     ) -> float:
         """Apply a final conservative calibration step and clamp to valid bounds."""
         prior_value = prior.clamp_probability(prior_estimate.probability)
+        factual_target = _factual_override_target(blend_result, prior_value)
+        if factual_target is not None:
+            return prior.clamp_probability(factual_target)
+
         candidate = prior.clamp_probability(blend_result.probability)
         max_move = 0.04 + (0.10 * route.template_confidence * max(0.25, blend_result.data_quality))
         delta = candidate - prior_value
@@ -314,17 +318,29 @@ class BaseForecastAgent(ABC):
             {"llm_conviction_nudge"},
             "llm_conviction",
         )
+        factual_phrase = _model_delta_phrase(
+            model_outputs,
+            prior_estimate.probability,
+            {"llm_factual_resolution_override"},
+            "factual_override",
+        )
         other_outputs = [
             output.explanation
             for output in model_outputs
-            if output.model_name not in {"baseline_market_prior", "trained_order_flow_residual", "llm_conviction_nudge"}
+            if output.model_name not in {
+                "baseline_market_prior",
+                "trained_order_flow_residual",
+                "llm_conviction_nudge",
+                "llm_factual_resolution_override",
+            }
             and output.confidence > 0.0
         ]
         other_phrase = f"; other={' | '.join(other_outputs[:2])}" if other_outputs else ""
         return (
             f"Template={route.template_name}; prior={prior_estimate.probability:.2f} "
             f"({prior_estimate.prior_source}); model_weight={blend_result.weight_on_models:.2f}; "
-            f"final={final_p_yes:.2f}. {lookup_phrase}; {fast_phrase}; {llm_phrase}{other_phrase}"
+            f"final={final_p_yes:.2f}. {lookup_phrase}; {fast_phrase}; {llm_phrase}; "
+            f"{factual_phrase}{other_phrase}"
         )
 
     def log_full_trace(self, trace: dict[str, Any]) -> None:
@@ -358,6 +374,24 @@ def _lookup_rationale(prior_estimate: PriorEstimate) -> str:
         f"lookup={key} bucket={bucket} n={n} fallback_steps={granularity} "
         f"raw_edge={raw_edge_text} capped_edge={edge_text}"
     )
+
+
+def _factual_override_target(blend_result: BlendResult, prior_probability: float) -> float | None:
+    diagnostics = blend_result.diagnostics or {}
+    target = diagnostics.get("llm_factual_override_target")
+    confidence = float(diagnostics.get("llm_factual_override_confidence") or 0.0)
+    data_quality = float(diagnostics.get("llm_factual_override_data_quality") or 0.0)
+    if target is None or confidence < 0.92 or data_quality < 0.85:
+        return None
+    try:
+        target_probability = float(target)
+    except (TypeError, ValueError):
+        return None
+    # Require a meaningful difference from the prior so this path only handles
+    # stale/settled-market situations, not ordinary forecasting.
+    if abs(target_probability - prior_probability) < 0.20:
+        return None
+    return target_probability
 
 
 def _model_delta_phrase(

@@ -38,10 +38,17 @@ def blend(
         and output.confidence > 0.0
         and output.data_quality > 0.0
     ]
+    factual_outputs = [
+        output for output in candidate_outputs
+        if output.model_name == "llm_factual_resolution_override"
+        and output.confidence >= 0.92
+        and output.data_quality >= 0.85
+    ]
     ordinary_outputs = [
         output for output in candidate_outputs
-        if output.model_name != "llm_conviction_nudge"
+        if output.model_name not in {"llm_conviction_nudge", "llm_factual_resolution_override"}
     ]
+    factual_diagnostics = _factual_diagnostics(factual_outputs)
     if not candidate_outputs:
         return BlendResult(
             probability=prior_value,
@@ -57,6 +64,19 @@ def blend(
 
     total_weight = sum(weights)
     if total_weight <= 0.0:
+        if factual_outputs:
+            factual_output = max(factual_outputs, key=lambda output: output.confidence * output.data_quality)
+            return BlendResult(
+                probability=clamp_probability(factual_output.p_model),
+                weight_on_models=1.0,
+                data_quality=factual_output.data_quality,
+                diagnostics={
+                    "model_mean": factual_output.p_model,
+                    "model_support": 1.0,
+                    "llm_conviction_delta": 0.0,
+                    **factual_diagnostics,
+                },
+            )
         conviction_delta = _conviction_delta(prior_value, conviction_outputs)
         if conviction_delta != 0.0:
             return BlendResult(
@@ -67,13 +87,14 @@ def blend(
                     "model_mean": prior_value,
                     "model_support": 0.0,
                     "llm_conviction_delta": conviction_delta,
+                    **factual_diagnostics,
                 },
             )
         return BlendResult(
             probability=prior_value,
             weight_on_models=0.0,
             data_quality=0.0,
-            diagnostics={"model_mean": prior_value, "model_support": 0.0},
+            diagnostics={"model_mean": prior_value, "model_support": 0.0, **factual_diagnostics},
         )
 
     model_mean = sum(output.p_model * weight for output, weight in zip(ordinary_outputs, weights, strict=True)) / total_weight
@@ -95,6 +116,10 @@ def blend(
     if conviction_delta != 0.0:
         blended = clamp_probability(blended + conviction_delta)
         effective_quality = max(effective_quality, max(output.data_quality for output in conviction_outputs))
+    if factual_outputs:
+        factual_output = max(factual_outputs, key=lambda output: output.confidence * output.data_quality)
+        blended = clamp_probability(factual_output.p_model)
+        effective_quality = max(effective_quality, factual_output.data_quality)
 
     return BlendResult(
         probability=clamp_probability(blended),
@@ -106,6 +131,7 @@ def blend(
             "avg_data_quality": avg_data_quality,
             "model_support": model_support,
             "llm_conviction_delta": conviction_delta,
+            **factual_diagnostics,
         },
     )
 
@@ -116,3 +142,14 @@ def _conviction_delta(prior: float, outputs: list[ModelOutput]) -> float:
     for output in outputs:
         delta += output.p_model - prior
     return max(-0.15, min(0.15, delta))
+
+
+def _factual_diagnostics(outputs: list[ModelOutput]) -> dict[str, float]:
+    if not outputs:
+        return {}
+    output = max(outputs, key=lambda item: item.confidence * item.data_quality)
+    return {
+        "llm_factual_override_target": output.p_model,
+        "llm_factual_override_confidence": output.confidence,
+        "llm_factual_override_data_quality": output.data_quality,
+    }

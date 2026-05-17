@@ -67,6 +67,18 @@ class ConvictionNudge:
     payload: dict[str, Any]
 
 
+@dataclass(frozen=True)
+class FactualResolutionOverride:
+    """High-confidence public fact override for already-settled events."""
+
+    p_model: float
+    applied: bool
+    confidence: float
+    data_quality: float
+    explanation: str
+    payload: dict[str, Any]
+
+
 def evaluate_llm_conviction_nudge(
     event: dict[str, Any],
     *,
@@ -133,6 +145,70 @@ def evaluate_llm_conviction_nudge(
     )
 
 
+def evaluate_factual_resolution_override(
+    event: dict[str, Any],
+    *,
+    template_name: str,
+    prior: float,
+) -> FactualResolutionOverride:
+    """Return near-certain YES/NO only when public facts already settle the event."""
+    prior_value = clamp_probability(prior)
+    if os.environ.get("FACTUAL_RESOLUTION_OVERRIDE_ENABLED") == "0":
+        return _neutral_factual(prior_value, "disabled")
+    if not _looks_factual_override_worthy(event, prior_value):
+        return _neutral_factual(prior_value, "not gated")
+    if not os.environ.get("OPENAI_API_KEY"):
+        return _neutral_factual(prior_value, "OPENAI_API_KEY is not set")
+
+    try:
+        payload = _call_openai_factual(event, template_name=template_name, prior=prior_value)
+    except Exception as exc:
+        return _neutral_factual(prior_value, f"{type(exc).__name__}: {exc}")
+
+    applied = bool(payload.get("event_already_resolved") is True)
+    direction = str(payload.get("resolved_direction") or "unknown").strip().upper()
+    accuracy_confidence = _clip(_to_float(payload.get("accuracy_confidence")) or 0.0, 0.0, 1.0)
+    source_quality = _clip(_to_float(payload.get("source_quality")) or accuracy_confidence, 0.0, 1.0)
+    not_ambiguous = bool(payload.get("resolution_is_unambiguous") is True)
+    source_urls = payload.get("source_urls")
+    has_sources = isinstance(source_urls, list) and any(str(item).strip().startswith(("http://", "https://")) for item in source_urls)
+    reason = str(payload.get("short_rationale") or payload.get("reason") or "")
+
+    if not (
+        applied
+        and direction in {"YES", "NO"}
+        and not_ambiguous
+        and has_sources
+        and accuracy_confidence >= 0.92
+        and source_quality >= 0.85
+    ):
+        return FactualResolutionOverride(
+            p_model=prior_value,
+            applied=False,
+            confidence=0.0,
+            data_quality=0.0,
+            explanation=(
+                "Factual override neutral: "
+                f"resolved={applied}, direction={direction}, accuracy={accuracy_confidence:.2f}, "
+                f"source_quality={source_quality:.2f}, unambiguous={not_ambiguous}. {reason}"
+            ).strip(),
+            payload=payload,
+        )
+
+    target = 0.99 if direction == "YES" else 0.01
+    return FactualResolutionOverride(
+        p_model=target,
+        applied=True,
+        confidence=accuracy_confidence,
+        data_quality=source_quality,
+        explanation=(
+            f"Factual override to {direction}: accuracy={accuracy_confidence:.2f}, "
+            f"source_quality={source_quality:.2f}. {reason}"
+        ).strip(),
+        payload=payload,
+    )
+
+
 def _call_openai(event: dict[str, Any], *, template_name: str, prior: float) -> dict[str, Any]:
     from openai import OpenAI
 
@@ -167,6 +243,24 @@ def _call_openai(event: dict[str, Any], *, template_name: str, prior: float) -> 
             ],
         )
         text = response.choices[0].message.content or "{}"
+    return json.loads(_extract_json(text))
+
+
+def _call_openai_factual(event: dict[str, Any], *, template_name: str, prior: float) -> dict[str, Any]:
+    from openai import OpenAI
+
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    model = os.environ.get("FACTUAL_RESOLUTION_MODEL", os.environ.get("LLM_CONVICTION_MODEL", os.environ.get("FORECAST_MODEL", "gpt-5.5")))
+    prompt = _build_factual_prompt(event, template_name=template_name, prior=prior)
+    response = client.responses.create(
+        model=model,
+        tools=[{"type": "web_search_preview"}],
+        input=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ],
+    )
+    text = getattr(response, "output_text", "") or "{}"
     return json.loads(_extract_json(text))
 
 
@@ -227,6 +321,49 @@ def _build_prompt(event: dict[str, Any], *, template_name: str, prior: float, nu
     )
 
 
+def _build_factual_prompt(event: dict[str, Any], *, template_name: str, prior: float) -> str:
+    compact_event = {
+        "title": event.get("title"),
+        "market_ticker": event.get("market_ticker") or event.get("ticker"),
+        "event_ticker": event.get("event_ticker"),
+        "category": event.get("category"),
+        "description": event.get("description"),
+        "rules": event.get("rules"),
+        "outcomes": event.get("outcomes"),
+        "close_time": event.get("close_time") or event.get("expiration_time") or event.get("expected_expiration_time"),
+        "current_market_probability": prior,
+    }
+    return json.dumps(
+        {
+            "task": (
+                "Determine whether this event is already settled by public facts. "
+                "This is not a forecast. Only answer YES/NO if the event's resolution condition "
+                "is already unambiguously satisfied or impossible according to official/reputable sources."
+            ),
+            "as_of_time": datetime.now(UTC).isoformat(),
+            "template_name": template_name,
+            "event": compact_event,
+            "rules": [
+                "Use official/primary sources first: official event pages, league pages, government/company releases, regulator pages, official results.",
+                "Major reputable news can confirm, but random blogs/social posts are not enough.",
+                "If the event is not already settled, return event_already_resolved=false.",
+                "If wording/rules leave ambiguity, return false.",
+                "Do not infer future outcomes.",
+            ],
+            "required_json_shape": {
+                "event_already_resolved": False,
+                "resolved_direction": "YES | NO | unknown",
+                "resolution_is_unambiguous": False,
+                "accuracy_confidence": 0.0,
+                "source_quality": 0.0,
+                "source_urls": ["real public URL used"],
+                "short_rationale": "one sentence explaining the public fact and source basis",
+            },
+        },
+        ensure_ascii=True,
+    )
+
+
 def _neutral(prior: float, reason: str) -> ConvictionNudge:
     return ConvictionNudge(
         p_model=prior,
@@ -237,6 +374,47 @@ def _neutral(prior: float, reason: str) -> ConvictionNudge:
         explanation=f"LLM conviction nudge skipped: {reason}.",
         payload={"skipped": reason},
     )
+
+
+def _neutral_factual(prior: float, reason: str) -> FactualResolutionOverride:
+    return FactualResolutionOverride(
+        p_model=prior,
+        applied=False,
+        confidence=0.0,
+        data_quality=0.0,
+        explanation=f"Factual override skipped: {reason}.",
+        payload={"skipped": reason},
+    )
+
+
+def _looks_factual_override_worthy(event: dict[str, Any], prior: float) -> bool:
+    if os.environ.get("FACTUAL_RESOLUTION_FORCE") == "1":
+        return True
+    text = " ".join(
+        str(event.get(key) or "")
+        for key in ("title", "question", "subtitle", "description", "rules", "category")
+    ).lower()
+    factual_terms = (
+        "who won",
+        "winner",
+        "named",
+        "announced",
+        "released",
+        "appointed",
+        "resigned",
+        "elected",
+        "launched",
+        "signed",
+        "passed",
+        "confirmed",
+        "reported",
+        "resolved",
+        "before",
+        "by ",
+    )
+    near_certain_market = prior <= 0.08 or prior >= 0.92
+    event_marked_resolved = event.get("resolved_outcome") is not None
+    return event_marked_resolved or near_certain_market or any(term in text for term in factual_terms)
 
 
 def _configured_nudge_size() -> float:

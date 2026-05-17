@@ -13,10 +13,13 @@ This server returns the website shape:
 from __future__ import annotations
 
 import os
+import json
+from time import perf_counter
 from typing import Any
 
 from fastapi import FastAPI, Request
 
+import agents.logging_utils as logging_utils
 from agents.kalshi_public import extract_bid_ask
 from agents.order_flow.kalshi_client import KalshiPublicClient
 from my_agent import predict as local_predict
@@ -42,6 +45,8 @@ def health() -> dict[str, str]:
 @app.post("/predict")
 async def predict(request: Request) -> dict[str, Any]:
     """Forecast a single event and return website-compatible probabilities."""
+    started = perf_counter()
+    path = "normal"
     try:
         event = await request.json()
     except Exception:
@@ -49,17 +54,25 @@ async def predict(request: Request) -> dict[str, Any]:
     if not isinstance(event, dict):
         event = {}
     if not event:
-        return {"probabilities": _probabilities_for_outcomes(event, 0.50)}
+        response = {"probabilities": _probabilities_for_outcomes(event, 0.50)}
+        _log_endpoint_trace(event, response, started, "empty_or_invalid_request")
+        return response
 
     if _should_use_fast_endpoint_mode(event):
-        return {"probabilities": _fast_probabilities(event)}
+        path = "fast_multi_or_check"
+        response = {"probabilities": _fast_probabilities(event)}
+        _log_endpoint_trace(event, response, started, path)
+        return response
     try:
         result = local_predict(event)
     except Exception:
+        path = "local_predict_exception"
         result = {"p_yes": 0.50}
     p_yes = _clamp_probability(result.get("p_yes"))
     probabilities = _probabilities_for_outcomes(event, p_yes)
-    return {"probabilities": probabilities}
+    response = {"probabilities": probabilities}
+    _log_endpoint_trace(event, response, started, path, agent_result=result)
+    return response
 
 
 def _should_use_fast_endpoint_mode(event: dict[str, Any]) -> bool:
@@ -413,3 +426,35 @@ class _temporary_env:
                 os.environ.pop(key, None)
             else:
                 os.environ[key] = value
+
+
+def _log_endpoint_trace(
+    event: dict[str, Any],
+    response: dict[str, Any],
+    started: float,
+    path: str,
+    *,
+    agent_result: dict[str, Any] | None = None,
+) -> None:
+    """Log request/response shape and latency without affecting predictions."""
+    try:
+        probabilities = response.get("probabilities")
+        rows = probabilities if isinstance(probabilities, list) else []
+        payload = {
+            "timestamp": logging_utils.utc_now_iso(),
+            "path": path,
+            "latency_ms": round((perf_counter() - started) * 1000.0, 1),
+            "event_ticker": event.get("event_ticker"),
+            "market_ticker": event.get("market_ticker"),
+            "title": event.get("title") or event.get("question"),
+            "category": event.get("category"),
+            "outcome_count": len(event.get("outcomes") or []) if isinstance(event.get("outcomes"), list) else 0,
+            "outcomes": event.get("outcomes") if isinstance(event.get("outcomes"), list) else None,
+            "probabilities": rows,
+            "probability_sum": sum(float(row.get("probability") or 0.0) for row in rows if isinstance(row, dict)),
+            "rationale": (agent_result or {}).get("rationale") if isinstance(agent_result, dict) else None,
+        }
+        logging_utils.append_jsonl(os.environ.get("ENDPOINT_LOG_PATH", "endpoint_logs.jsonl"), payload)
+        print("forecast_endpoint_trace " + json.dumps(payload, ensure_ascii=True, default=str), flush=True)
+    except Exception:
+        return

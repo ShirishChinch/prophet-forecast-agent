@@ -46,8 +46,9 @@ except Exception:  # pragma: no cover - evidence edge layer is optional
     predict_edge_probability = None  # type: ignore
 
 try:
-    from agents.llm_conviction_nudge import evaluate_llm_conviction_nudge
+    from agents.llm_conviction_nudge import evaluate_factual_resolution_override, evaluate_llm_conviction_nudge
 except Exception:  # pragma: no cover - LLM nudge layer is optional
+    evaluate_factual_resolution_override = None  # type: ignore
     evaluate_llm_conviction_nudge = None  # type: ignore
 
 
@@ -580,6 +581,49 @@ class LLMConvictionNudgeModel(BaseTemplateModel):
         )
 
 
+class FactualResolutionOverrideModel(BaseTemplateModel):
+    """Near-certain override when a public fact already settles the event."""
+
+    model_name = "llm_factual_resolution_override"
+
+    def predict_probability(
+        self,
+        features: dict[str, float],
+        prior: float,
+        context: dict[str, Any],
+    ) -> ModelOutput:
+        _ = features
+        if evaluate_factual_resolution_override is None:
+            return ModelOutput(
+                p_model=clamp_probability(prior),
+                confidence=0.0,
+                explanation="Factual override unavailable; stayed at prior.",
+                data_quality=0.0,
+                model_name=self.model_name,
+            )
+        try:
+            result = evaluate_factual_resolution_override(
+                event=context.get("event") or {},
+                template_name=str(context.get("template_name") or ""),
+                prior=prior,
+            )
+        except Exception as exc:
+            return ModelOutput(
+                p_model=clamp_probability(prior),
+                confidence=0.0,
+                explanation=f"Factual override failed closed ({type(exc).__name__}); stayed at prior.",
+                data_quality=0.0,
+                model_name=self.model_name,
+            )
+        return ModelOutput(
+            p_model=result.p_model,
+            confidence=result.confidence if result.applied else 0.0,
+            explanation=result.explanation,
+            data_quality=result.data_quality if result.applied else 0.0,
+            model_name=self.model_name,
+        )
+
+
 def evaluate_template_models(
     template_name: str,
     features: dict[str, float],
@@ -622,6 +666,8 @@ def evaluate_template_models(
         models.append(JPMaQSEconomicModel())
 
     models.append(LLMEdgeResidualModel())
+    if _should_run_factual_resolution_override(template_name, context, prior):
+        models.append(FactualResolutionOverrideModel())
     if _should_run_llm_conviction_nudge(template_name, context, prior):
         models.append(LLMConvictionNudgeModel())
 
@@ -695,6 +741,60 @@ def _should_run_llm_conviction_nudge(
     if generic_threshold_words and 0.15 <= prior <= 0.85:
         return True
     return False
+
+
+def _should_run_factual_resolution_override(
+    template_name: str,
+    context: dict[str, Any],
+    prior: float,
+) -> bool:
+    import os
+
+    if os.environ.get("FACTUAL_RESOLUTION_OVERRIDE_ENABLED") == "0":
+        return False
+    if os.environ.get("FACTUAL_RESOLUTION_FORCE") == "1":
+        return bool(os.environ.get("OPENAI_API_KEY"))
+    if not os.environ.get("OPENAI_API_KEY"):
+        return False
+
+    event = context.get("event") or {}
+    spec = context.get("spec") or {}
+    text = " ".join(
+        str(value or "")
+        for value in (
+            spec.get("title") or event.get("title"),
+            spec.get("category") or event.get("category"),
+            spec.get("description") or event.get("description"),
+            spec.get("rules") or event.get("rules"),
+        )
+    ).lower()
+    if event.get("resolved_outcome") is not None:
+        return True
+    if prior <= 0.08 or prior >= 0.92:
+        return True
+    factual_terms = (
+        "who won",
+        "winner",
+        "named",
+        "announced",
+        "released",
+        "appointed",
+        "resigned",
+        "elected",
+        "launched",
+        "signed",
+        "passed",
+        "confirmed",
+        "reported",
+    )
+    if any(term in text for term in factual_terms):
+        return True
+    return template_name in {
+        POLITICS_ELECTIONS_POLICY,
+        COMPANY_TECH_ANNOUNCEMENT,
+        CULTURE_AWARDS_ENTERTAINMENT,
+        GENERIC_NEWS_UNIQUE,
+    } and _lookup_details(context) == {}
 
 
 def _lookup_details(context: dict[str, Any]) -> dict[str, Any]:
