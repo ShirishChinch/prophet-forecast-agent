@@ -1,0 +1,3562 @@
+{
+  "bucket_width": 5,
+  "fallback_order": [
+    "series|day_before_close|bucket",
+    "series|ALL|bucket",
+    "ALL|day_before_close|bucket",
+    "ALL|ALL|bucket"
+  ],
+  "min_samples_exclusive": 50,
+  "notes": [
+    "Raw empirical average resolved_yes by 5-cent odds bucket.",
+    "No smoothing, regression, LLM, or synthetic missing-price filling.",
+    "Runtime applies a cell only when n > min_samples_exclusive."
+  ],
+  "source_csv": "data\\tennis_15d\\tennis_15d_observed_snapshots.csv",
+  "table_type": "tennis_bucket_lookup",
+  "tables": {
+    "ALL|0": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.01437121212121212,
+        "n": 66
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.07692307692307693,
+        "mean_market_odds": 0.08224358974358968,
+        "n": 39
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.12903225806451613,
+        "mean_market_odds": 0.1335483870967742,
+        "n": 31
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.2542372881355932,
+        "mean_market_odds": 0.18338983050847452,
+        "n": 59
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.21153846153846154,
+        "mean_market_odds": 0.22884615384615378,
+        "n": 52
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.42105263157894735,
+        "mean_market_odds": 0.28203947368421056,
+        "n": 76
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.29310344827586204,
+        "mean_market_odds": 0.3296551724137931,
+        "n": 116
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.35074626865671643,
+        "mean_market_odds": 0.37955223880597017,
+        "n": 134
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.39603960396039606,
+        "mean_market_odds": 0.43331683168316826,
+        "n": 101
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5133858267716536,
+        "mean_market_odds": 0.49752755905511814,
+        "n": 635
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.4166666666666667,
+        "mean_market_odds": 0.5313095238095238,
+        "n": 84
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.584070796460177,
+        "mean_market_odds": 0.5797345132743362,
+        "n": 113
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.6637931034482759,
+        "mean_market_odds": 0.6303017241379308,
+        "n": 116
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.712,
+        "mean_market_odds": 0.6796,
+        "n": 125
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.5789473684210527,
+        "mean_market_odds": 0.7293859649122806,
+        "n": 57
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.7887323943661971,
+        "mean_market_odds": 0.781830985915493,
+        "n": 71
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.7674418604651163,
+        "mean_market_odds": 0.8293023255813954,
+        "n": 43
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.8648648648648649,
+        "mean_market_odds": 0.8789189189189188,
+        "n": 37
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.9285714285714286,
+        "mean_market_odds": 0.9254464285714284,
+        "n": 28
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9864846153846153,
+        "n": 65
+      }
+    ],
+    "ALL|1": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.02775,
+        "n": 6
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.2,
+        "mean_market_odds": 0.08479999999999996,
+        "n": 20
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.15789473684210525,
+        "mean_market_odds": 0.13578947368421052,
+        "n": 19
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.1702127659574468,
+        "mean_market_odds": 0.1806382978723404,
+        "n": 47
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.23404255319148937,
+        "mean_market_odds": 0.2293617021276596,
+        "n": 47
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.3373493975903614,
+        "mean_market_odds": 0.2800602409638554,
+        "n": 83
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.2948717948717949,
+        "mean_market_odds": 0.3318589743589743,
+        "n": 78
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.31896551724137934,
+        "mean_market_odds": 0.37956896551724145,
+        "n": 116
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.4308823529411764,
+        "n": 102
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.495260663507109,
+        "mean_market_odds": 0.4972689573459715,
+        "n": 844
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.6074766355140186,
+        "mean_market_odds": 0.5351869158878504,
+        "n": 107
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6176470588235294,
+        "mean_market_odds": 0.5835784313725491,
+        "n": 102
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.7156862745098039,
+        "mean_market_odds": 0.630343137254902,
+        "n": 102
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.7209302325581395,
+        "mean_market_odds": 0.6780813953488372,
+        "n": 86
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6086956521739131,
+        "mean_market_odds": 0.7281884057971013,
+        "n": 69
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.7741935483870968,
+        "mean_market_odds": 0.7805645161290323,
+        "n": 62
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.7878787878787878,
+        "mean_market_odds": 0.831969696969697,
+        "n": 33
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.875,
+        "mean_market_odds": 0.8799999999999999,
+        "n": 24
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.8,
+        "mean_market_odds": 0.9233999999999998,
+        "n": 10
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 0.875,
+        "mean_market_odds": 0.9691874999999999,
+        "n": 8
+      }
+    ],
+    "ALL|2": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.14285714285714285,
+        "mean_market_odds": 0.09142857142857139,
+        "n": 7
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.375,
+        "mean_market_odds": 0.12937499999999996,
+        "n": 8
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.14285714285714285,
+        "mean_market_odds": 0.1878571428571428,
+        "n": 7
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.2,
+        "mean_market_odds": 0.22874999999999995,
+        "n": 20
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.4,
+        "mean_market_odds": 0.2806666666666667,
+        "n": 15
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.32,
+        "mean_market_odds": 0.3324,
+        "n": 25
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.5277777777777778,
+        "mean_market_odds": 0.38083333333333336,
+        "n": 36
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.4444444444444444,
+        "mean_market_odds": 0.4262962962962963,
+        "n": 27
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5026737967914439,
+        "mean_market_odds": 0.4974598930481284,
+        "n": 374
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5272619047619048,
+        "n": 42
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5333333333333333,
+        "mean_market_odds": 0.5831666666666667,
+        "n": 30
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.46875,
+        "mean_market_odds": 0.62625,
+        "n": 32
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.6538461538461539,
+        "mean_market_odds": 0.6750000000000002,
+        "n": 26
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6875,
+        "mean_market_odds": 0.733125,
+        "n": 16
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.8333333333333334,
+        "mean_market_odds": 0.7822222222222223,
+        "n": 18
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.82,
+        "n": 4
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.7692307692307693,
+        "mean_market_odds": 0.8823076923076922,
+        "n": 13
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.9275,
+        "n": 2
+      }
+    ],
+    "ALL|3": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0999999999999999,
+        "n": 2
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.1275,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.185,
+        "n": 1
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.215,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.27799999999999997,
+        "n": 5
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.25,
+        "mean_market_odds": 0.32999999999999996,
+        "n": 4
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.374,
+        "n": 5
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.4,
+        "mean_market_odds": 0.426,
+        "n": 5
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.4885057471264368,
+        "mean_market_odds": 0.49885057471264366,
+        "n": 174
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.525,
+        "n": 8
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.5740000000000001,
+        "n": 5
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.63,
+        "n": 6
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.8,
+        "mean_market_odds": 0.6839999999999999,
+        "n": 5
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.7399999999999999,
+        "n": 3
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.785,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.815,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.88625,
+        "n": 4
+      }
+    ],
+    "ALL|4": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0774999999999999,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.16,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.28,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.3775,
+        "n": 2
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.4909090909090909,
+        "mean_market_odds": 0.49972727272727263,
+        "n": 55
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.515,
+        "n": 1
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.6,
+        "n": 1
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.645,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.72,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.84,
+        "n": 1
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9225000000000001,
+        "n": 2
+      }
+    ],
+    "ALL|5": [
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.135,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.29,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.375,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5454545454545454,
+        "mean_market_odds": 0.4986363636363636,
+        "n": 11
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.515,
+        "n": 1
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.625,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.71,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.865,
+        "n": 1
+      }
+    ],
+    "ALL|6": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0849999999999999,
+        "n": 1
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.305,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 8
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.695,
+        "n": 1
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.915,
+        "n": 1
+      }
+    ],
+    "ALL|7": [
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.295,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 2
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.705,
+        "n": 1
+      }
+    ],
+    "ALL|8": [
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.31,
+        "n": 1
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.69,
+        "n": 1
+      }
+    ],
+    "ALL|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.015486111111111108,
+        "n": 72
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.11267605633802817,
+        "mean_market_odds": 0.08427464788732388,
+        "n": 71
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.16393442622950818,
+        "mean_market_odds": 0.13352459016393442,
+        "n": 61
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.20869565217391303,
+        "mean_market_odds": 0.18234782608695652,
+        "n": 115
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.225,
+        "mean_market_odds": 0.22891666666666666,
+        "n": 120
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.3626373626373626,
+        "mean_market_odds": 0.2810164835164835,
+        "n": 182
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.29333333333333333,
+        "mean_market_odds": 0.3305333333333333,
+        "n": 225
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.3673469387755102,
+        "mean_market_odds": 0.3795918367346939,
+        "n": 294
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.37446808510638296,
+        "mean_market_odds": 0.4312978723404255,
+        "n": 235
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5016642891107941,
+        "mean_market_odds": 0.49759629101283886,
+        "n": 2103
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5267489711934157,
+        "mean_market_odds": 0.5319753086419753,
+        "n": 243
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5936254980079682,
+        "mean_market_odds": 0.5816733067729084,
+        "n": 251
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.6511627906976745,
+        "mean_market_odds": 0.6298449612403101,
+        "n": 258
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.7142857142857143,
+        "mean_market_odds": 0.6788775510204083,
+        "n": 245
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6190476190476191,
+        "mean_market_odds": 0.729251700680272,
+        "n": 147
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.7828947368421053,
+        "mean_market_odds": 0.7813815789473684,
+        "n": 152
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.7804878048780488,
+        "mean_market_odds": 0.8298780487804878,
+        "n": 82
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.8607594936708861,
+        "mean_market_odds": 0.8800000000000001,
+        "n": 79
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.8837209302325582,
+        "mean_market_odds": 0.9246860465116279,
+        "n": 43
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 0.9863013698630136,
+        "mean_market_odds": 0.9845890410958902,
+        "n": 73
+      }
+    ],
+    "atp|0": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.014442307692307695,
+        "n": 26
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.05555555555555555,
+        "mean_market_odds": 0.0825555555555555,
+        "n": 18
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.1875,
+        "mean_market_odds": 0.1315625,
+        "n": 16
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.2692307692307692,
+        "mean_market_odds": 0.18788461538461534,
+        "n": 26
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.08,
+        "mean_market_odds": 0.2318,
+        "n": 25
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.28265625000000005,
+        "n": 32
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.26785714285714285,
+        "mean_market_odds": 0.3299107142857142,
+        "n": 56
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.37681159420289856,
+        "mean_market_odds": 0.37666666666666665,
+        "n": 69
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.3829787234042553,
+        "mean_market_odds": 0.4342553191489361,
+        "n": 47
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5174825174825175,
+        "mean_market_odds": 0.49715034965034965,
+        "n": 286
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.40476190476190477,
+        "mean_market_odds": 0.5335714285714287,
+        "n": 42
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.625,
+        "mean_market_odds": 0.5790625,
+        "n": 48
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.6190476190476191,
+        "mean_market_odds": 0.6311111111111111,
+        "n": 63
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.7377049180327869,
+        "mean_market_odds": 0.6786065573770492,
+        "n": 61
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.45454545454545453,
+        "mean_market_odds": 0.7288636363636364,
+        "n": 22
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.8648648648648649,
+        "mean_market_odds": 0.7813513513513516,
+        "n": 37
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.7142857142857143,
+        "mean_market_odds": 0.8292857142857143,
+        "n": 14
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.8421052631578947,
+        "mean_market_odds": 0.8784210526315789,
+        "n": 19
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.9285714285714286,
+        "mean_market_odds": 0.926357142857143,
+        "n": 14
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.98698,
+        "n": 25
+      }
+    ],
+    "atp|1": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.035,
+        "n": 3
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.18181818181818182,
+        "mean_market_odds": 0.08954545454545447,
+        "n": 11
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.16666666666666666,
+        "mean_market_odds": 0.13624999999999998,
+        "n": 12
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.05,
+        "mean_market_odds": 0.17924999999999996,
+        "n": 20
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.2631578947368421,
+        "mean_market_odds": 0.22763157894736838,
+        "n": 19
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.3902439024390244,
+        "mean_market_odds": 0.2796341463414634,
+        "n": 41
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.2702702702702703,
+        "mean_market_odds": 0.3305405405405405,
+        "n": 37
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.38095238095238093,
+        "mean_market_odds": 0.3819841269841269,
+        "n": 63
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.29411764705882354,
+        "mean_market_odds": 0.4310784313725489,
+        "n": 51
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.4887640449438202,
+        "mean_market_odds": 0.49651685393258427,
+        "n": 356
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.6607142857142857,
+        "mean_market_odds": 0.5364285714285714,
+        "n": 56
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5882352941176471,
+        "mean_market_odds": 0.5848039215686275,
+        "n": 51
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.7037037037037037,
+        "mean_market_odds": 0.6273148148148148,
+        "n": 54
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.680875,
+        "n": 40
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.53125,
+        "mean_market_odds": 0.7271875,
+        "n": 32
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.76,
+        "mean_market_odds": 0.7814,
+        "n": 25
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.9333333333333333,
+        "mean_market_odds": 0.8336666666666666,
+        "n": 15
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.9333333333333333,
+        "mean_market_odds": 0.8780000000000001,
+        "n": 15
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.9183333333333334,
+        "n": 6
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.965,
+        "n": 3
+      }
+    ],
+    "atp|2": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.09999999999999992,
+        "n": 4
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.25,
+        "mean_market_odds": 0.12624999999999997,
+        "n": 4
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.18166666666666664,
+        "n": 3
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.2727272727272727,
+        "mean_market_odds": 0.22499999999999998,
+        "n": 11
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.3,
+        "mean_market_odds": 0.2745,
+        "n": 10
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.375,
+        "mean_market_odds": 0.32999999999999996,
+        "n": 16
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.6190476190476191,
+        "mean_market_odds": 0.38190476190476186,
+        "n": 21
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.47058823529411764,
+        "mean_market_odds": 0.4261764705882353,
+        "n": 17
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.4918918918918919,
+        "mean_market_odds": 0.4972972972972973,
+        "n": 185
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.5322500000000001,
+        "n": 20
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5263157894736842,
+        "mean_market_odds": 0.585,
+        "n": 19
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.3125,
+        "mean_market_odds": 0.6234375,
+        "n": 16
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.6738888888888889,
+        "n": 18
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.7345,
+        "n": 10
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.8,
+        "mean_market_odds": 0.7825000000000001,
+        "n": 10
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.8274999999999999,
+        "n": 2
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.875,
+        "mean_market_odds": 0.8868750000000001,
+        "n": 8
+      }
+    ],
+    "atp|3": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0999999999999999,
+        "n": 2
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.1275,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.185,
+        "n": 1
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.215,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.28375,
+        "n": 4
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.32499999999999996,
+        "n": 3
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.37166666666666665,
+        "n": 3
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.4266666666666666,
+        "n": 3
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.47560975609756095,
+        "mean_market_odds": 0.4985365853658536,
+        "n": 82
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.53,
+        "n": 4
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.5733333333333334,
+        "n": 3
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.63375,
+        "n": 4
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.6912499999999999,
+        "n": 4
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.7375,
+        "n": 2
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.785,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.815,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.88625,
+        "n": 4
+      }
+    ],
+    "atp|4": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0774999999999999,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.16,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.28,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.3775,
+        "n": 2
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 30
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.6,
+        "n": 1
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.645,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.72,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.84,
+        "n": 1
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9225000000000001,
+        "n": 2
+      }
+    ],
+    "atp|5": [
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.135,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.29,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.375,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.497,
+        "n": 5
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.515,
+        "n": 1
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.625,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.71,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.865,
+        "n": 1
+      }
+    ],
+    "atp|6": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0849999999999999,
+        "n": 1
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.305,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 4
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.695,
+        "n": 1
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.915,
+        "n": 1
+      }
+    ],
+    "atp|7": [
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.295,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 2
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.705,
+        "n": 1
+      }
+    ],
+    "atp|8": [
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.31,
+        "n": 1
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.69,
+        "n": 1
+      }
+    ],
+    "atp|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.01656896551724138,
+        "n": 29
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.07894736842105263,
+        "mean_market_odds": 0.08713157894736835,
+        "n": 38
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.17142857142857143,
+        "mean_market_odds": 0.13242857142857142,
+        "n": 35
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.17647058823529413,
+        "mean_market_odds": 0.18352941176470583,
+        "n": 51
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.19642857142857142,
+        "mean_market_odds": 0.22874999999999998,
+        "n": 56
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.3888888888888889,
+        "mean_market_odds": 0.28061111111111114,
+        "n": 90
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.2719298245614035,
+        "mean_market_odds": 0.3296052631578946,
+        "n": 114
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.42138364779874216,
+        "mean_market_odds": 0.37937106918239,
+        "n": 159
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.3559322033898305,
+        "mean_market_odds": 0.43152542372881353,
+        "n": 118
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.4978947368421053,
+        "mean_market_odds": 0.4971684210526316,
+        "n": 950
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5691056910569106,
+        "mean_market_odds": 0.534390243902439,
+        "n": 123
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5983606557377049,
+        "mean_market_odds": 0.5824180327868852,
+        "n": 122
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.60431654676259,
+        "mean_market_odds": 0.6288848920863311,
+        "n": 139
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.746031746031746,
+        "mean_market_odds": 0.6794841269841269,
+        "n": 126
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.5441176470588235,
+        "mean_market_odds": 0.7287499999999999,
+        "n": 68
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.8082191780821918,
+        "mean_market_odds": 0.7815753424657534,
+        "n": 73
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.8181818181818182,
+        "mean_market_odds": 0.8310606060606062,
+        "n": 33
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.8936170212765957,
+        "mean_market_odds": 0.8801063829787231,
+        "n": 47
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.8695652173913043,
+        "mean_market_odds": 0.9234347826086957,
+        "n": 23
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9846249999999998,
+        "n": 28
+      }
+    ],
+    "kxatpchallengermatch|0": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.013571428571428571,
+        "n": 28
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.19,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.28500000000000003,
+        "n": 2
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.335,
+        "n": 2
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.36,
+        "n": 1
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.41,
+        "n": 1
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.6866666666666666,
+        "n": 3
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.75,
+        "n": 2
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.81,
+        "n": 2
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9878571428571427,
+        "n": 28
+      }
+    ],
+    "kxatpchallengermatch|1": [
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.13,
+        "n": 1
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.2,
+        "mean_market_odds": 0.18,
+        "n": 5
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.14285714285714285,
+        "mean_market_odds": 0.22999999999999998,
+        "n": 7
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.14285714285714285,
+        "mean_market_odds": 0.28,
+        "n": 7
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.33,
+        "n": 3
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.375,
+        "n": 2
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.425,
+        "n": 2
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.47,
+        "n": 1
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.54,
+        "n": 1
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.58,
+        "n": 5
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.63,
+        "n": 1
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.8,
+        "mean_market_odds": 0.668,
+        "n": 5
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.8571428571428571,
+        "mean_market_odds": 0.7271428571428571,
+        "n": 7
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.7777777777777778,
+        "mean_market_odds": 0.7822222222222223,
+        "n": 9
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.835,
+        "n": 2
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.8866666666666667,
+        "n": 3
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.96,
+        "n": 2
+      }
+    ],
+    "kxatpchallengermatch|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.013571428571428571,
+        "n": 28
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.13,
+        "n": 1
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.16666666666666666,
+        "mean_market_odds": 0.18166666666666664,
+        "n": 6
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.14285714285714285,
+        "mean_market_odds": 0.22999999999999998,
+        "n": 7
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.1111111111111111,
+        "mean_market_odds": 0.28111111111111114,
+        "n": 9
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.2,
+        "mean_market_odds": 0.332,
+        "n": 5
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.36999999999999994,
+        "n": 3
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.42,
+        "n": 3
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.47,
+        "n": 1
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.54,
+        "n": 1
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.58,
+        "n": 5
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.63,
+        "n": 1
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.875,
+        "mean_market_odds": 0.675,
+        "n": 8
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.8888888888888888,
+        "mean_market_odds": 0.7322222222222221,
+        "n": 9
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.7777777777777778,
+        "mean_market_odds": 0.7822222222222223,
+        "n": 9
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.8225,
+        "n": 4
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.8866666666666667,
+        "n": 3
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 0.9666666666666667,
+        "mean_market_odds": 0.9859999999999997,
+        "n": 30
+      }
+    ],
+    "kxatpmatch|0": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.02,
+        "n": 1
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.06,
+        "n": 1
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.18,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.3,
+        "n": 1
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.33,
+        "n": 2
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.395,
+        "n": 2
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.47333333333333333,
+        "n": 3
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.525,
+        "n": 2
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.5800000000000001,
+        "n": 2
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.635,
+        "n": 2
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.7,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.74,
+        "n": 1
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.77,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.82,
+        "n": 1
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.96,
+        "n": 1
+      }
+    ],
+    "kxatpmatch|1": [
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.39,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.46,
+        "n": 2
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.69,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.73,
+        "n": 2
+      }
+    ],
+    "kxatpmatch|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.02,
+        "n": 1
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.06,
+        "n": 1
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.18,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.3,
+        "n": 1
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.33,
+        "n": 2
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.39333333333333337,
+        "n": 3
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.46799999999999997,
+        "n": 5
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.525,
+        "n": 2
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.5800000000000001,
+        "n": 2
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.635,
+        "n": 2
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.695,
+        "n": 2
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.7333333333333334,
+        "n": 3
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.77,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.82,
+        "n": 1
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.96,
+        "n": 1
+      }
+    ],
+    "kxwtamatch|0": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.01,
+        "n": 6
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.07,
+        "n": 1
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.14500000000000002,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.18,
+        "n": 1
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.28,
+        "n": 2
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.35,
+        "n": 1
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.25,
+        "mean_market_odds": 0.435,
+        "n": 4
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.495,
+        "n": 2
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.5166666666666667,
+        "n": 3
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.5766666666666667,
+        "n": 3
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.62,
+        "n": 2
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.72,
+        "n": 2
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.8266666666666667,
+        "n": 3
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.88,
+        "n": 1
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.93,
+        "n": 1
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9900000000000001,
+        "n": 6
+      }
+    ],
+    "kxwtamatch|1": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.08,
+        "n": 3
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.195,
+        "n": 2
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.295,
+        "n": 2
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.25,
+        "mean_market_odds": 0.445,
+        "n": 4
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.4775,
+        "n": 4
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.8,
+        "mean_market_odds": 0.542,
+        "n": 5
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5800000000000001,
+        "n": 2
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.65,
+        "n": 1
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.67,
+        "n": 1
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.7775000000000001,
+        "n": 4
+      }
+    ],
+    "kxwtamatch|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.01,
+        "n": 6
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.25,
+        "mean_market_odds": 0.0775,
+        "n": 4
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.14500000000000002,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.19000000000000003,
+        "n": 3
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.28750000000000003,
+        "n": 4
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.35,
+        "n": 1
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.25,
+        "mean_market_odds": 0.44,
+        "n": 8
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.4833333333333334,
+        "n": 6
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.5325,
+        "n": 8
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.5780000000000001,
+        "n": 5
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.63,
+        "n": 3
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.67,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.72,
+        "n": 2
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.7775000000000001,
+        "n": 4
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.8266666666666667,
+        "n": 3
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.88,
+        "n": 1
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.93,
+        "n": 1
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9900000000000001,
+        "n": 6
+      }
+    ],
+    "unknown|0": [
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.125,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.385,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 4
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.615,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.875,
+        "n": 1
+      }
+    ],
+    "unknown|1": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.01,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.165,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.37,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 2
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.63,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.835,
+        "n": 1
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.99,
+        "n": 2
+      }
+    ],
+    "unknown|2": [
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.13,
+        "n": 1
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.1949999999999999,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.37,
+        "n": 1
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.41,
+        "n": 1
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.59,
+        "n": 1
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.63,
+        "n": 1
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.805,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.87,
+        "n": 1
+      }
+    ],
+    "unknown|3": [
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 4
+      }
+    ],
+    "unknown|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.01,
+        "n": 2
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.1275,
+        "n": 2
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.17999999999999994,
+        "n": 2
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.375,
+        "n": 3
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.41,
+        "n": 1
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 10
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.59,
+        "n": 1
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.625,
+        "n": 3
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.805,
+        "n": 1
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.835,
+        "n": 1
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.8725,
+        "n": 2
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.99,
+        "n": 2
+      }
+    ],
+    "wta|0": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.022599999999999974,
+        "n": 5
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.10526315789473684,
+        "mean_market_odds": 0.08376315789473682,
+        "n": 19
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.08333333333333333,
+        "mean_market_odds": 0.135,
+        "n": 12
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.23333333333333334,
+        "mean_market_odds": 0.1795,
+        "n": 30
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.22611111111111107,
+        "n": 27
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.41025641025641024,
+        "mean_market_odds": 0.2810256410256411,
+        "n": 39
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.3090909090909091,
+        "mean_market_odds": 0.3288181818181819,
+        "n": 55
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.32786885245901637,
+        "mean_market_odds": 0.3825409836065574,
+        "n": 61
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.42857142857142855,
+        "mean_market_odds": 0.43275510204081635,
+        "n": 49
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5117647058823529,
+        "mean_market_odds": 0.49804411764705886,
+        "n": 340
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.40540540540540543,
+        "mean_market_odds": 0.5302702702702703,
+        "n": 37
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5666666666666667,
+        "mean_market_odds": 0.5804166666666667,
+        "n": 60
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.7083333333333334,
+        "mean_market_odds": 0.6297916666666666,
+        "n": 48
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.6833333333333333,
+        "mean_market_odds": 0.6799166666666666,
+        "n": 60
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.7286666666666668,
+        "n": 30
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.696969696969697,
+        "mean_market_odds": 0.7827272727272729,
+        "n": 33
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.782608695652174,
+        "mean_market_odds": 0.8317391304347824,
+        "n": 23
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.875,
+        "mean_market_odds": 0.8796875,
+        "n": 16
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.9230769230769231,
+        "mean_market_odds": 0.9241153846153846,
+        "n": 13
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9774,
+        "n": 5
+      }
+    ],
+    "wta|1": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.0415,
+        "n": 1
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.16666666666666666,
+        "mean_market_odds": 0.07849999999999997,
+        "n": 6
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.16666666666666666,
+        "mean_market_odds": 0.13583333333333333,
+        "n": 6
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.2631578947368421,
+        "mean_market_odds": 0.181578947368421,
+        "n": 19
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.23809523809523808,
+        "mean_market_odds": 0.2307142857142857,
+        "n": 21
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.2796969696969697,
+        "n": 33
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.3157894736842105,
+        "mean_market_odds": 0.3332894736842105,
+        "n": 38
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.24489795918367346,
+        "mean_market_odds": 0.3766326530612245,
+        "n": 49
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.37777777777777777,
+        "mean_market_odds": 0.4296666666666666,
+        "n": 45
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.4989561586638831,
+        "mean_market_odds": 0.4981941544885177,
+        "n": 479
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5333333333333333,
+        "mean_market_odds": 0.5327777777777778,
+        "n": 45
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6590909090909091,
+        "mean_market_odds": 0.5827272727272728,
+        "n": 44
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.7333333333333333,
+        "mean_market_odds": 0.6335555555555555,
+        "n": 45
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.6923076923076923,
+        "mean_market_odds": 0.6764102564102564,
+        "n": 39
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6785714285714286,
+        "mean_market_odds": 0.7294642857142856,
+        "n": 28
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.7916666666666666,
+        "mean_market_odds": 0.7795833333333334,
+        "n": 24
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.8296666666666666,
+        "n": 15
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.8333333333333334,
+        "mean_market_odds": 0.8816666666666667,
+        "n": 6
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.931,
+        "n": 4
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9585,
+        "n": 1
+      }
+    ],
+    "wta|2": [
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.08,
+        "n": 3
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.6666666666666666,
+        "mean_market_odds": 0.1333333333333333,
+        "n": 3
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.19166666666666657,
+        "n": 3
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.1111111111111111,
+        "mean_market_odds": 0.23333333333333328,
+        "n": 9
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.293,
+        "n": 5
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.2222222222222222,
+        "mean_market_odds": 0.33666666666666667,
+        "n": 9
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.42857142857142855,
+        "mean_market_odds": 0.37999999999999995,
+        "n": 14
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.3333333333333333,
+        "mean_market_odds": 0.4283333333333333,
+        "n": 9
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5132275132275133,
+        "mean_market_odds": 0.4976190476190477,
+        "n": 189
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.4090909090909091,
+        "mean_market_odds": 0.5227272727272727,
+        "n": 22
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.579,
+        "n": 10
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.6,
+        "mean_market_odds": 0.6289999999999999,
+        "n": 15
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.625,
+        "mean_market_odds": 0.6775,
+        "n": 8
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.8333333333333334,
+        "mean_market_odds": 0.7308333333333333,
+        "n": 6
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.8571428571428571,
+        "mean_market_odds": 0.7785714285714286,
+        "n": 7
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.8125,
+        "n": 2
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.87625,
+        "n": 4
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.9275,
+        "n": 2
+      }
+    ],
+    "wta|3": [
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.255,
+        "n": 1
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.345,
+        "n": 1
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.3775,
+        "n": 2
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.425,
+        "n": 2
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.4990909090909091,
+        "n": 88
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.52,
+        "n": 4
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.575,
+        "n": 2
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.6225,
+        "n": 2
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.655,
+        "n": 1
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.745,
+        "n": 1
+      }
+    ],
+    "wta|4": [
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.48,
+        "mean_market_odds": 0.49939999999999996,
+        "n": 25
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.515,
+        "n": 1
+      }
+    ],
+    "wta|5": [
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 6
+      }
+    ],
+    "wta|6": [
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5,
+        "mean_market_odds": 0.5,
+        "n": 4
+      }
+    ],
+    "wta|ALL": [
+      {
+        "bucket_high": 5,
+        "bucket_low": 1,
+        "empirical_p_yes": 0.0,
+        "mean_market_odds": 0.025749999999999985,
+        "n": 6
+      },
+      {
+        "bucket_high": 10,
+        "bucket_low": 6,
+        "empirical_p_yes": 0.14285714285714285,
+        "mean_market_odds": 0.08223214285714282,
+        "n": 28
+      },
+      {
+        "bucket_high": 15,
+        "bucket_low": 11,
+        "empirical_p_yes": 0.19047619047619047,
+        "mean_market_odds": 0.135,
+        "n": 21
+      },
+      {
+        "bucket_high": 20,
+        "bucket_low": 16,
+        "empirical_p_yes": 0.23076923076923078,
+        "mean_market_odds": 0.18096153846153842,
+        "n": 52
+      },
+      {
+        "bucket_high": 25,
+        "bucket_low": 21,
+        "empirical_p_yes": 0.2631578947368421,
+        "mean_market_odds": 0.2289473684210526,
+        "n": 57
+      },
+      {
+        "bucket_high": 30,
+        "bucket_low": 26,
+        "empirical_p_yes": 0.38461538461538464,
+        "mean_market_odds": 0.2808974358974359,
+        "n": 78
+      },
+      {
+        "bucket_high": 35,
+        "bucket_low": 31,
+        "empirical_p_yes": 0.3106796116504854,
+        "mean_market_odds": 0.33131067961165056,
+        "n": 103
+      },
+      {
+        "bucket_high": 40,
+        "bucket_low": 36,
+        "empirical_p_yes": 0.30952380952380953,
+        "mean_market_odds": 0.3798809523809524,
+        "n": 126
+      },
+      {
+        "bucket_high": 45,
+        "bucket_low": 41,
+        "empirical_p_yes": 0.4,
+        "mean_market_odds": 0.4309047619047618,
+        "n": 105
+      },
+      {
+        "bucket_high": 50,
+        "bucket_low": 46,
+        "empirical_p_yes": 0.5048629531388152,
+        "mean_market_odds": 0.4981653404067198,
+        "n": 1131
+      },
+      {
+        "bucket_high": 55,
+        "bucket_low": 51,
+        "empirical_p_yes": 0.46788990825688076,
+        "mean_market_odds": 0.5292660550458715,
+        "n": 109
+      },
+      {
+        "bucket_high": 60,
+        "bucket_low": 56,
+        "empirical_p_yes": 0.603448275862069,
+        "mean_market_odds": 0.5810775862068965,
+        "n": 116
+      },
+      {
+        "bucket_high": 65,
+        "bucket_low": 61,
+        "empirical_p_yes": 0.7,
+        "mean_market_odds": 0.6310909090909091,
+        "n": 110
+      },
+      {
+        "bucket_high": 70,
+        "bucket_low": 66,
+        "empirical_p_yes": 0.6759259259259259,
+        "mean_market_odds": 0.6782407407407409,
+        "n": 108
+      },
+      {
+        "bucket_high": 75,
+        "bucket_low": 71,
+        "empirical_p_yes": 0.6615384615384615,
+        "mean_market_odds": 0.7294615384615385,
+        "n": 65
+      },
+      {
+        "bucket_high": 80,
+        "bucket_low": 76,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.7810937499999999,
+        "n": 64
+      },
+      {
+        "bucket_high": 85,
+        "bucket_low": 81,
+        "empirical_p_yes": 0.75,
+        "mean_market_odds": 0.8300000000000001,
+        "n": 40
+      },
+      {
+        "bucket_high": 90,
+        "bucket_low": 86,
+        "empirical_p_yes": 0.8076923076923077,
+        "mean_market_odds": 0.8796153846153845,
+        "n": 26
+      },
+      {
+        "bucket_high": 95,
+        "bucket_low": 91,
+        "empirical_p_yes": 0.8947368421052632,
+        "mean_market_odds": 0.9259210526315789,
+        "n": 19
+      },
+      {
+        "bucket_high": 99,
+        "bucket_low": 96,
+        "empirical_p_yes": 1.0,
+        "mean_market_odds": 0.9742500000000001,
+        "n": 6
+      }
+    ]
+  },
+  "version": 1
+}

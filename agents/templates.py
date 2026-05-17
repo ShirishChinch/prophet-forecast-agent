@@ -1,0 +1,40 @@
+"""Template names and route metadata for modular forecast agents."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+MARKET_PRIOR_BASELINE = "MARKET_PRIOR_BASELINE"
+PRICE_THRESHOLD = "PRICE_THRESHOLD"
+MACRO_RELEASE = "MACRO_RELEASE"
+SPORTS = "SPORTS"
+WEATHER = "WEATHER"
+POLITICS_ELECTIONS_POLICY = "POLITICS_ELECTIONS_POLICY"
+COMPANY_TECH_ANNOUNCEMENT = "COMPANY_TECH_ANNOUNCEMENT"
+CULTURE_AWARDS_ENTERTAINMENT = "CULTURE_AWARDS_ENTERTAINMENT"
+GENERIC_NEWS_UNIQUE = "GENERIC_NEWS_UNIQUE"
+INFORMED_FLOW_PUBLIC_SIGNAL = "INFORMED_FLOW_PUBLIC_SIGNAL"
+
+ALL_TEMPLATES = (
+    MARKET_PRIOR_BASELINE,
+    PRICE_THRESHOLD,
+    MACRO_RELEASE,
+    SPORTS,
+    WEATHER,
+    POLITICS_ELECTIONS_POLICY,
+    COMPANY_TECH_ANNOUNCEMENT,
+    CULTURE_AWARDS_ENTERTAINMENT,
+    GENERIC_NEWS_UNIQUE,
+    INFORMED_FLOW_PUBLIC_SIGNAL,
+)
+
+
+@dataclass(frozen=True)
+class TemplateRoute:
+    """Route decision for one event."""
+
+    template_name: str
+    template_confidence: float
+    reason: str
+    closest_template: str | None = None
+
