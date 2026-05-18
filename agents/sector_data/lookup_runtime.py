@@ -13,11 +13,11 @@ from agents.sector_data.route_verifier import verify_sector_route
 
 
 DEFAULT_ARTIFACT = Path("agents/sector_data/artifacts/sector_bucket_lookup.json")
-MIN_SUPPORTED_SAMPLES = 20
+MIN_SUPPORTED_SAMPLES = 30
 SAMPLE_CAPS = (
-    (20, 50, 0.03),
-    (50, 100, 0.07),
-    (100, None, 0.12),
+    (30, 70, 0.03),
+    (70, 120, 0.07),
+    (120, None, 0.12),
 )
 FALLBACK_MULTIPLIERS = {
     0: 1.00,
