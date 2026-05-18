@@ -43,23 +43,48 @@ def health() -> dict[str, str]:
 
 
 @app.post("/predict")
-async def predict(request: Request) -> dict[str, Any]:
+async def predict(request: Request) -> Any:
+    """Forecast one event, or a batch of events/questions."""
+    try:
+        payload = await request.json()
+    except Exception:
+        payload = {}
+
+    if isinstance(payload, list):
+        return [_predict_one(_coerce_event(item), path_prefix="batch") for item in payload]
+
+    return _predict_one(_coerce_event(payload))
+
+
+def _coerce_event(payload: Any) -> dict[str, Any]:
+    """Accept both event objects and plain question strings."""
+    if isinstance(payload, dict):
+        return payload
+    if isinstance(payload, str) and payload.strip():
+        return {"title": payload.strip(), "question": payload.strip(), "outcomes": ["Yes", "No"]}
+    return {}
+
+
+def _predict_one(event: dict[str, Any], *, path_prefix: str = "") -> dict[str, Any]:
     """Forecast a single event and return website-compatible probabilities."""
     started = perf_counter()
     path = "normal"
-    try:
-        event = await request.json()
-    except Exception:
-        event = {}
+    if path_prefix:
+        path = f"{path_prefix}_{path}"
     if not isinstance(event, dict):
         event = {}
     if not event:
         response = {"probabilities": _probabilities_for_outcomes(event, 0.50)}
-        _log_endpoint_trace(event, response, started, "empty_or_invalid_request")
+        _log_endpoint_trace(
+            event,
+            response,
+            started,
+            f"{path_prefix}_empty_or_invalid_request" if path_prefix else "empty_or_invalid_request",
+        )
         return response
 
     if _should_use_fast_endpoint_mode(event):
-        path = "fast_multi_or_check"
+        path = f"{path_prefix}_fast_multi_or_check" if path_prefix else "fast_multi_or_check"
         response = {"probabilities": _fast_probabilities(event)}
         _log_endpoint_trace(event, response, started, path)
         return response

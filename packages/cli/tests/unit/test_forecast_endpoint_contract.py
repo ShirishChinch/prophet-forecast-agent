@@ -60,3 +60,54 @@ def test_nonexclusive_multi_outcome_does_not_force_sum_to_one() -> None:
         {"market": "B", "probability": 0.6},
         {"market": "C", "probability": 0.4},
     ]
+
+
+def test_predict_accepts_batch_of_event_objects() -> None:
+    client = TestClient(app)
+
+    response = client.post(
+        "/predict",
+        json=[
+            {
+                "title": "Who will win the NBA championship?",
+                "category": "Sports",
+                "outcomes": ["A", "B", "C", "D"],
+            },
+            {
+                "title": "Which teams will make the playoffs?",
+                "category": "Sports",
+                "outcomes": ["A", "B", "C"],
+                "probabilities": [0.7, 0.6, 0.4],
+            },
+        ],
+    )
+
+    body = response.json()
+    assert response.status_code == 200
+    assert isinstance(body, list)
+    assert len(body) == 2
+    assert [row["market"] for row in body[0]["probabilities"]] == ["A", "B", "C", "D"]
+    assert body[1]["probabilities"] == [
+        {"market": "A", "probability": 0.7},
+        {"market": "B", "probability": 0.6},
+        {"market": "C", "probability": 0.4},
+    ]
+
+
+def test_predict_accepts_batch_of_question_strings() -> None:
+    client = TestClient(app)
+
+    response = client.post(
+        "/predict",
+        json=[
+            "Will BTC exceed $100,000 by June 30?",
+            "Will it rain in NYC tomorrow?",
+        ],
+    )
+
+    body = response.json()
+    assert response.status_code == 200
+    assert isinstance(body, list)
+    assert len(body) == 2
+    assert body[0]["probabilities"][0]["market"] == "Yes"
+    assert body[0]["probabilities"][1]["market"] == "No"
