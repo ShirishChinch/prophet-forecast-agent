@@ -64,7 +64,8 @@ async def predict(request: Request) -> dict[str, Any]:
         _log_endpoint_trace(event, response, started, path)
         return response
     try:
-        result = local_predict(event)
+        with _temporary_env(_endpoint_fast_env()):
+            result = local_predict(event)
     except Exception:
         path = "local_predict_exception"
         result = {"p_yes": 0.50}
@@ -143,14 +144,7 @@ def _predict_multi_outcome_sides(
     market_probs: list[float],
 ) -> list[float] | None:
     side_probs: list[float] = []
-    with _temporary_env(
-        {
-            "TEMPLATE_ROUTE_LLM_VERIFY": "0",
-            "SECTOR_ROUTE_LLM_VERIFY": "0",
-            "LLM_CONVICTION_NUDGE_ENABLED": "0",
-            "ORDER_FLOW_LLM_ENABLED": "0",
-        }
-    ):
+    with _temporary_env(_endpoint_fast_env()):
         for label, market_probability in zip(labels, market_probs, strict=True):
             binary_event = _binary_side_event(event, label, market_probability)
             try:
@@ -159,6 +153,17 @@ def _predict_multi_outcome_sides(
                 return None
             side_probs.append(_clamp_probability(result.get("p_yes")))
     return side_probs if side_probs else None
+
+
+def _endpoint_fast_env() -> dict[str, str]:
+    """Disable network-heavy LLM layers on hosted endpoint calls."""
+    return {
+        "TEMPLATE_ROUTE_LLM_VERIFY": "0",
+        "SECTOR_ROUTE_LLM_VERIFY": "0",
+        "LLM_CONVICTION_NUDGE_ENABLED": "0",
+        "FACTUAL_RESOLUTION_OVERRIDE_ENABLED": "0",
+        "ORDER_FLOW_LLM_ENABLED": "0",
+    }
 
 
 def _binary_side_event(event: dict[str, Any], label: str, market_probability: float) -> dict[str, Any]:
