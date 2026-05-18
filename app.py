@@ -50,6 +50,8 @@ async def predict(request: Request) -> Any:
     except Exception:
         payload = {}
 
+    _log_endpoint_received(payload)
+
     if isinstance(payload, list):
         return [_predict_one(_coerce_event(item), path_prefix="batch") for item in payload]
 
@@ -488,3 +490,40 @@ def _log_endpoint_trace(
         print("forecast_endpoint_trace " + json.dumps(payload, ensure_ascii=True, default=str), flush=True)
     except Exception:
         return
+
+
+def _log_endpoint_received(payload: Any) -> None:
+    """Log request receipt before any slow prediction work starts."""
+    try:
+        if isinstance(payload, list):
+            preview = [_payload_preview(item) for item in payload[:5]]
+            row = {
+                "timestamp": logging_utils.utc_now_iso(),
+                "payload_type": "list",
+                "batch_size": len(payload),
+                "preview": preview,
+            }
+        else:
+            row = {
+                "timestamp": logging_utils.utc_now_iso(),
+                "payload_type": type(payload).__name__,
+                "batch_size": None,
+                "preview": _payload_preview(payload),
+            }
+        print("forecast_endpoint_received " + json.dumps(row, ensure_ascii=True, default=str), flush=True)
+    except Exception:
+        return
+
+
+def _payload_preview(payload: Any) -> dict[str, Any]:
+    if isinstance(payload, dict):
+        return {
+            "event_ticker": payload.get("event_ticker"),
+            "market_ticker": payload.get("market_ticker"),
+            "title": payload.get("title") or payload.get("question"),
+            "category": payload.get("category"),
+            "outcome_count": len(payload.get("outcomes") or []) if isinstance(payload.get("outcomes"), list) else 0,
+        }
+    if isinstance(payload, str):
+        return {"title": payload[:200], "payload_type": "str"}
+    return {"payload_type": type(payload).__name__}
