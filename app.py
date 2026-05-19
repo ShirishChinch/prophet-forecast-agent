@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import os
 import json
+import re
 from time import perf_counter
 from typing import Any
 
@@ -149,6 +150,8 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
             market_probs = [1.0 / len(labels) for _ in labels]
         else:
             market_probs = [max(0.0, value) / total for value in market_probs]
+    else:
+        market_probs = _enforce_threshold_monotonicity(labels, market_probs)
 
     return [
         {"market": label, "probability": max(0.0, min(1.0, probability))}
@@ -367,6 +370,8 @@ def _looks_mutually_exclusive(event: dict[str, Any], labels: list[str]) -> bool:
     ).lower()
     if len(labels) <= 2:
         return True
+    if _looks_like_threshold_ladder(labels):
+        return False
     non_exclusive_terms = (
         "top 2",
         "top two",
@@ -410,6 +415,52 @@ def _looks_mutually_exclusive(event: dict[str, Any], labels: list[str]) -> bool:
     if any(term in text for term in exclusive_terms):
         return True
     return True
+
+
+def _looks_like_threshold_ladder(labels: list[str]) -> bool:
+    thresholds = [_threshold_from_label(label) for label in labels]
+    parsed = [threshold for threshold in thresholds if threshold is not None]
+    if len(parsed) < 3:
+        return False
+    return len(parsed) >= max(3, int(0.75 * len(labels)))
+
+
+def _enforce_threshold_monotonicity(labels: list[str], probabilities: list[float]) -> list[float]:
+    thresholds = [_threshold_from_label(label) for label in labels]
+    indexed = [
+        (index, threshold, max(0.0, min(1.0, probability)))
+        for index, (threshold, probability) in enumerate(zip(thresholds, probabilities, strict=True))
+    ]
+    if sum(1 for _, threshold, _ in indexed if threshold is not None) < 3:
+        return probabilities
+
+    # For "N+" markets, larger thresholds must have lower or equal Yes probability.
+    ordered = sorted(
+        [item for item in indexed if item[1] is not None],
+        key=lambda item: float(item[1]),
+    )
+    adjusted = [max(0.0, min(1.0, probability)) for probability in probabilities]
+    previous = 1.0
+    for index, _, probability in ordered:
+        previous = min(previous, probability)
+        adjusted[index] = previous
+    return adjusted
+
+
+def _threshold_from_label(label: str) -> float | None:
+    text = str(label).strip().lower().replace(",", "")
+    if not text:
+        return None
+    plus_match = re.search(r"(?<![\w.])-?\$?\s*(\d+(?:\.\d+)?)\s*\+", text)
+    if plus_match:
+        return float(plus_match.group(1))
+    threshold_match = re.search(
+        r"\b(?:at least|over|above|greater than|more than)\s+\$?\s*(\d+(?:\.\d+)?)\b",
+        text,
+    )
+    if threshold_match:
+        return float(threshold_match.group(1))
+    return None
 
 
 def _price_to_probability(value: Any) -> float:
