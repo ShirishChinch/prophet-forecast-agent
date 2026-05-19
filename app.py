@@ -21,6 +21,7 @@ from fastapi import FastAPI, Request
 
 import agents.logging_utils as logging_utils
 from agents.kalshi_public import extract_bid_ask
+from agents.market_calibration import calibrate_market_probability
 from agents.order_flow.kalshi_client import KalshiPublicClient
 from my_agent import predict as local_predict
 
@@ -126,13 +127,18 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
     mutually_exclusive = _looks_mutually_exclusive(event, labels)
 
     market_probs = _extract_outcome_probabilities(event, labels)
+    market_probs_from_prices = market_probs is not None
     if market_probs is None:
         market_probs = _fetch_kalshi_outcome_probabilities(event, labels)
+        market_probs_from_prices = market_probs is not None
     if market_probs is None:
         equal = 1.0 / len(labels) if mutually_exclusive else 0.50
         market_probs = [equal for _ in labels]
 
-    if _should_run_side_agents(event, labels):
+    if market_probs_from_prices:
+        market_probs = _calibrate_outcome_market_probabilities(event, labels, market_probs)
+
+    if not market_probs_from_prices and _should_run_side_agents(event, labels):
         side_probs = _predict_multi_outcome_sides(event, labels, market_probs)
         if side_probs is not None:
             market_probs = side_probs
@@ -148,6 +154,25 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
         {"market": label, "probability": max(0.0, min(1.0, probability))}
         for label, probability in zip(labels, market_probs, strict=True)
     ]
+
+
+def _calibrate_outcome_market_probabilities(
+    event: dict[str, Any],
+    labels: list[str],
+    market_probs: list[float],
+) -> list[float]:
+    calibrated: list[float] = []
+    for label, probability in zip(labels, market_probs, strict=True):
+        side_event = dict(event)
+        side_event["multi_outcome_label"] = label
+        side_event["yes_sub_title"] = label
+        result = calibrate_market_probability(
+            probability,
+            template_family=str(event.get("category") or ""),
+            event=side_event,
+        )
+        calibrated.append(max(0.0, min(1.0, result.probability)))
+    return calibrated
 
 
 def _should_run_side_agents(event: dict[str, Any], labels: list[str]) -> bool:
@@ -252,12 +277,20 @@ def _fetch_kalshi_outcome_probabilities(event: dict[str, Any], labels: list[str]
         bid, ask = extract_bid_ask(matched)
         if bid is None or ask is None or ask < bid:
             return None
-        by_label[label] = (bid + ask) / 2.0
+        by_label[label] = _quote_probability(bid, ask)
     return [by_label[label] for label in labels]
 
 
 def _looks_like_kalshi_ticker(ticker: str) -> bool:
     return ticker.upper().startswith("KX")
+
+
+def _quote_probability(bid: float, ask: float) -> float:
+    if bid <= 0.0 and ask <= 0.01:
+        return 0.0
+    if bid >= 0.99 and ask >= 1.0:
+        return 1.0
+    return (bid + ask) / 2.0
 
 
 def _best_label_market(label: str, markets: list[dict[str, Any]]) -> dict[str, Any] | None:

@@ -16,6 +16,7 @@ from typing import Any
 
 DEFAULT_ARTIFACT_PATH = Path("agents/order_flow/artifacts/market_prior_calibration.json")
 DEFAULT_MIN_SAMPLES = 50
+DEFAULT_MIN_CALIBRATED_PROBABILITY = 0.0001
 
 _ARTIFACT_CACHE: dict[Path, dict[str, Any] | None] = {}
 
@@ -54,6 +55,8 @@ def calibrate_market_probability(
         return CalibrationResult(raw, False, "missing_artifact", {})
     if not _artifact_passes_backtest(artifact):
         return CalibrationResult(raw, False, "artifact_failed_backtest", {})
+    if artifact.get("table_type") == "symmetric_signed_parabola_residual":
+        return _apply_symmetric_signed_parabola(raw, artifact)
     if artifact.get("table_type") == "sector_time_odds":
         return _lookup_sector_time_odds(
             raw,
@@ -100,6 +103,47 @@ def calibrate_market_probability(
         )
 
     return CalibrationResult(raw, False, "no_supported_bin", {"raw_market_probability": raw})
+
+
+def _apply_symmetric_signed_parabola(
+    probability: float,
+    artifact: dict[str, Any],
+) -> CalibrationResult:
+    """Apply a symmetric one-parameter residual curve.
+
+    The fitted residual is:
+
+        forecast_probability - market_probability
+            = coefficient * (p - 0.5) * abs(p - 0.5)
+
+    This keeps YES/NO complements exactly symmetric:
+    f(1 - p) == 1 - f(p).
+    """
+    coefficient = _to_float(artifact.get("coefficient"))
+    if coefficient is None:
+        return CalibrationResult(probability, False, "invalid_symmetric_curve", {})
+    min_probability = _to_float(artifact.get("min_probability"))
+    if min_probability is None:
+        min_probability = DEFAULT_MIN_CALIBRATED_PROBABILITY
+    min_probability = max(0.0, min(0.01, min_probability))
+
+    centered = probability - 0.5
+    residual = coefficient * centered * abs(centered)
+    calibrated = max(min_probability, min(1.0 - min_probability, probability + residual))
+    return CalibrationResult(
+        probability=calibrated,
+        applied=True,
+        source="market_prior_calibration:symmetric_signed_parabola_residual",
+        details={
+            "raw_market_probability": probability,
+            "coefficient": coefficient,
+            "centered_probability": centered,
+            "residual": residual,
+            "calibrated_probability": calibrated,
+            "min_probability": min_probability,
+            "curve": "p + coefficient * (p - 0.5) * abs(p - 0.5)",
+        },
+    )
 
 
 def _lookup_sector_time_odds(
@@ -304,7 +348,7 @@ def _valid_probability(value: Any) -> float | None:
         number /= 100.0
     if not 0.0 <= number <= 1.0:
         return None
-    return _clamp(number)
+    return float(number)
 
 
 def _to_float(value: Any) -> float | None:
