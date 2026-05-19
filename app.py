@@ -148,13 +148,7 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
         if side_probs is not None:
             market_probs = side_probs
 
-    if mutually_exclusive:
-        total = sum(max(0.0, value) for value in market_probs)
-        if total <= 0.0:
-            market_probs = [1.0 / len(labels) for _ in labels]
-        else:
-            market_probs = [max(0.0, value) / total for value in market_probs]
-    else:
+    if not mutually_exclusive:
         market_probs = _enforce_ladder_monotonicity(labels, market_probs)
 
     return [
