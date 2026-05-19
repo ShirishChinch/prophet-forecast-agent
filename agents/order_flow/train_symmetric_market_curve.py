@@ -42,6 +42,7 @@ def main() -> None:
     parser.add_argument("--curve-report", default=str(DEFAULT_CURVE_REPORT))
     parser.add_argument("--min-probability", type=float, default=0.0001)
     parser.add_argument("--sink-radius", type=float, default=0.30)
+    parser.add_argument("--hardening-strength", type=float, default=40.0)
     parser.add_argument("--test-frac", type=float, default=0.25)
     args = parser.parse_args()
 
@@ -51,7 +52,8 @@ def main() -> None:
 
     train, test = _chronological_market_split(observed, args.test_frac)
     sym_train = _symmetrize(train)
-    coefficient = _fit_coefficient(sym_train, args.sink_radius)
+    base_coefficient = _fit_coefficient(sym_train, args.sink_radius)
+    coefficient = base_coefficient * max(0.0, float(args.hardening_strength))
 
     sym_test = _symmetrize(test)
     raw = sym_test["market_probability"].to_numpy(dtype=float)
@@ -68,7 +70,9 @@ def main() -> None:
             "n_test": int(len(test)),
             "n_symmetric_train": int(len(sym_train)),
             "n_symmetric_test": int(len(sym_test)),
+            "base_coefficient": float(base_coefficient),
             "coefficient": float(coefficient),
+            "hardening_strength": float(args.hardening_strength),
             "sink_radius": float(args.sink_radius),
             "min_probability": float(args.min_probability),
             "table_type": "symmetric_threshold_cubic_residual",
@@ -81,7 +85,9 @@ def main() -> None:
         "version": 1,
         "table_type": "symmetric_threshold_cubic_residual",
         "allow_runtime": True,
+        "base_coefficient": float(base_coefficient),
         "coefficient": float(coefficient),
+        "hardening_strength": float(args.hardening_strength),
         "sink_radius": float(args.sink_radius),
         "min_probability": float(args.min_probability),
         "backtest": report,
