@@ -42,7 +42,7 @@ def main() -> None:
     parser.add_argument("--curve-report", default=str(DEFAULT_CURVE_REPORT))
     parser.add_argument("--min-probability", type=float, default=0.0001)
     parser.add_argument("--sink-radius", type=float, default=0.30)
-    parser.add_argument("--hardening-strength", type=float, default=40.0)
+    parser.add_argument("--hardening-strength", type=float, default=108.04693102955147)
     parser.add_argument("--test-frac", type=float, default=0.25)
     args = parser.parse_args()
 
