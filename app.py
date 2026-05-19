@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import os
 import json
+import re
 from time import perf_counter
 from typing import Any
 
@@ -116,6 +117,10 @@ def _should_use_fast_endpoint_mode(event: dict[str, Any]) -> bool:
     category = str(event.get("category") or "").lower()
     if isinstance(outcomes, list) and len(outcomes) > 2:
         return True
+    if isinstance(outcomes, list) and len(outcomes) > 1:
+        labels = [str(outcome) for outcome in outcomes]
+        if not _looks_mutually_exclusive(event, labels):
+            return True
     return "nba championship" in title or ("nba" in title and "championship" in title) or "format check" in category
 
 
@@ -142,6 +147,9 @@ def _fast_probabilities(event: dict[str, Any]) -> list[dict[str, Any]]:
         side_probs = _predict_multi_outcome_sides(event, labels, market_probs)
         if side_probs is not None:
             market_probs = side_probs
+
+    if not mutually_exclusive:
+        market_probs = _enforce_ladder_monotonicity(labels, market_probs)
 
     return [
         {"market": label, "probability": max(0.0, min(1.0, probability))}
@@ -358,6 +366,8 @@ def _looks_mutually_exclusive(event: dict[str, Any], labels: list[str]) -> bool:
         str(event.get(key) or "")
         for key in ("title", "question", "subtitle", "description", "rules", "category")
     ).lower()
+    if _looks_like_nested_ladder(labels):
+        return False
     if len(labels) <= 2:
         return True
     non_exclusive_terms = (
@@ -403,6 +413,115 @@ def _looks_mutually_exclusive(event: dict[str, Any], labels: list[str]) -> bool:
     if any(term in text for term in exclusive_terms):
         return True
     return True
+
+
+def _looks_like_nested_ladder(labels: list[str]) -> bool:
+    values = [_ladder_value_from_label(label) for label in labels]
+    parsed = [value for value in values if value is not None]
+    if len(parsed) < 2:
+        return False
+    kinds = {kind for kind, _ in parsed}
+    if len(kinds) != 1:
+        return False
+    return len(parsed) >= max(2, int(0.75 * len(labels)))
+
+
+def _enforce_ladder_monotonicity(labels: list[str], probabilities: list[float]) -> list[float]:
+    values = [_ladder_value_from_label(label) for label in labels]
+    indexed = [
+        (index, value, max(0.0, min(1.0, probability)))
+        for index, (value, probability) in enumerate(zip(values, probabilities, strict=True))
+    ]
+    parsed = [item for item in indexed if item[1] is not None]
+    if len(parsed) < 2:
+        return probabilities
+    kind = parsed[0][1][0]
+    if any(item[1][0] != kind for item in parsed):
+        return probabilities
+
+    ordered = sorted(parsed, key=lambda item: float(item[1][1]))
+    adjusted = [max(0.0, min(1.0, probability)) for probability in probabilities]
+    if kind == "deadline_before":
+        previous = 0.0
+        for index, _, probability in ordered:
+            previous = max(previous, probability)
+            adjusted[index] = previous
+    else:
+        previous = 1.0
+        for index, _, probability in ordered:
+            previous = min(previous, probability)
+            adjusted[index] = previous
+    return adjusted
+
+
+def _ladder_value_from_label(label: str) -> tuple[str, float] | None:
+    text = str(label).strip().lower().replace(",", "")
+    if not text:
+        return None
+    plus_match = re.search(r"(?<![\w.])-?\$?\s*(\d+(?:\.\d+)?)\s*\+", text)
+    if plus_match:
+        return ("threshold_at_least", float(plus_match.group(1)))
+    threshold_match = re.search(
+        r"\b(?:at least|over|above|greater than|more than)\s+\$?\s*(\d+(?:\.\d+)?)\b",
+        text,
+    )
+    if threshold_match:
+        return ("threshold_at_least", float(threshold_match.group(1)))
+    before_match = re.search(r"\b(?:before|by|on or before)\s+(.+)$", text)
+    if before_match:
+        date_value = _date_ladder_value(before_match.group(1))
+        if date_value is not None:
+            return ("deadline_before", date_value)
+    return None
+
+
+def _date_ladder_value(value: str) -> float | None:
+    text = " ".join(str(value).lower().split())
+    iso_match = re.search(r"\b(\d{4})-(\d{1,2})-(\d{1,2})\b", text)
+    if iso_match:
+        year, month, day = (int(part) for part in iso_match.groups())
+        return float((year * 10000) + (month * 100) + day)
+
+    month_names = {
+        "jan": 1,
+        "january": 1,
+        "feb": 2,
+        "february": 2,
+        "mar": 3,
+        "march": 3,
+        "apr": 4,
+        "april": 4,
+        "may": 5,
+        "jun": 6,
+        "june": 6,
+        "jul": 7,
+        "july": 7,
+        "aug": 8,
+        "august": 8,
+        "sep": 9,
+        "sept": 9,
+        "september": 9,
+        "oct": 10,
+        "october": 10,
+        "nov": 11,
+        "november": 11,
+        "dec": 12,
+        "december": 12,
+    }
+    month_match = re.search(
+        r"\b("
+        + "|".join(sorted(month_names, key=len, reverse=True))
+        + r")\.?\s+(\d{1,2})(?:\s+(\d{4}))?\b",
+        text,
+    )
+    if not month_match:
+        return None
+    month_name, day_text, year_text = month_match.groups()
+    month = month_names[month_name.rstrip(".")]
+    day = int(day_text)
+    if year_text:
+        return float((int(year_text) * 10000) + (month * 100) + day)
+    return float((month * 100) + day)
 
 
 def _price_to_probability(value: Any) -> float:
