@@ -55,6 +55,8 @@ def calibrate_market_probability(
         return CalibrationResult(raw, False, "missing_artifact", {})
     if not _artifact_passes_backtest(artifact):
         return CalibrationResult(raw, False, "artifact_failed_backtest", {})
+    if artifact.get("table_type") == "symmetric_threshold_cubic_residual":
+        return _apply_symmetric_threshold_cubic(raw, artifact)
     if artifact.get("table_type") == "symmetric_signed_parabola_residual":
         return _apply_symmetric_signed_parabola(raw, artifact)
     if artifact.get("table_type") == "sector_time_odds":
@@ -142,6 +144,50 @@ def _apply_symmetric_signed_parabola(
             "calibrated_probability": calibrated,
             "min_probability": min_probability,
             "curve": "p + coefficient * (p - 0.5) * abs(p - 0.5)",
+        },
+    )
+
+
+def _apply_symmetric_threshold_cubic(
+    probability: float,
+    artifact: dict[str, Any],
+) -> CalibrationResult:
+    """Apply a symmetric curve with 50 as a local sink.
+
+    The residual is:
+
+        forecast_probability - market_probability
+            = coefficient * x * (x^2 - sink_radius^2), where x = p - 0.5
+
+    With a positive coefficient, probabilities inside the sink radius are
+    pulled toward 50%, and probabilities outside it are pushed farther away.
+    """
+    coefficient = _to_float(artifact.get("coefficient"))
+    sink_radius = _to_float(artifact.get("sink_radius"))
+    if coefficient is None or sink_radius is None:
+        return CalibrationResult(probability, False, "invalid_symmetric_threshold_cubic", {})
+    min_probability = _to_float(artifact.get("min_probability"))
+    if min_probability is None:
+        min_probability = DEFAULT_MIN_CALIBRATED_PROBABILITY
+    min_probability = max(0.0, min(0.01, min_probability))
+    sink_radius = max(0.0, min(0.49, sink_radius))
+
+    centered = probability - 0.5
+    residual = coefficient * centered * ((centered * centered) - (sink_radius * sink_radius))
+    calibrated = max(min_probability, min(1.0 - min_probability, probability + residual))
+    return CalibrationResult(
+        probability=calibrated,
+        applied=True,
+        source="market_prior_calibration:symmetric_threshold_cubic_residual",
+        details={
+            "raw_market_probability": probability,
+            "coefficient": coefficient,
+            "sink_radius": sink_radius,
+            "centered_probability": centered,
+            "residual": residual,
+            "calibrated_probability": calibrated,
+            "min_probability": min_probability,
+            "curve": "p + coefficient * x * (x^2 - sink_radius^2), x = p - 0.5",
         },
     )
 

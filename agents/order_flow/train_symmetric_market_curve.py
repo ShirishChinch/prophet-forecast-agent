@@ -3,7 +3,7 @@
 The model is intentionally small:
 
     forecast_probability - market_probability
-        = coefficient * (p - 0.5) * abs(p - 0.5)
+        = coefficient * x * (x^2 - sink_radius^2), where x = p - 0.5
 
 Training duplicates every YES observation as its NO complement. A 90c YES row
 therefore also contributes a 10c NO row, forcing the runtime curve to satisfy
@@ -11,6 +11,9 @@ f(1 - p) == 1 - f(p).
 
 The fitted residual uses market_probability - actual_probability as a simple
 historical proxy for forecast-minus-actual over/underconfidence.
+
+With a positive coefficient, 50% is a local sink: probabilities inside the
+sink radius move toward 50%, while probabilities outside it move farther away.
 """
 
 from __future__ import annotations
@@ -38,6 +41,7 @@ def main() -> None:
     parser.add_argument("--report", default=str(DEFAULT_REPORT))
     parser.add_argument("--curve-report", default=str(DEFAULT_CURVE_REPORT))
     parser.add_argument("--min-probability", type=float, default=0.0001)
+    parser.add_argument("--sink-radius", type=float, default=0.30)
     parser.add_argument("--test-frac", type=float, default=0.25)
     args = parser.parse_args()
 
@@ -47,12 +51,12 @@ def main() -> None:
 
     train, test = _chronological_market_split(observed, args.test_frac)
     sym_train = _symmetrize(train)
-    coefficient = _fit_coefficient(sym_train)
+    coefficient = _fit_coefficient(sym_train, args.sink_radius)
 
     sym_test = _symmetrize(test)
     raw = sym_test["market_probability"].to_numpy(dtype=float)
     actual = sym_test["actual_probability"].to_numpy(dtype=float)
-    calibrated = _apply_curve(raw, coefficient, args.min_probability)
+    calibrated = _apply_curve(raw, coefficient, args.sink_radius, args.min_probability)
     report = _metrics(actual, raw, calibrated)
     report.update(
         {
@@ -65,18 +69,20 @@ def main() -> None:
             "n_symmetric_train": int(len(sym_train)),
             "n_symmetric_test": int(len(sym_test)),
             "coefficient": float(coefficient),
+            "sink_radius": float(args.sink_radius),
             "min_probability": float(args.min_probability),
-            "table_type": "symmetric_signed_parabola_residual",
+            "table_type": "symmetric_threshold_cubic_residual",
             "split_method": "market_disjoint_chronological",
-            "notes": "YES rows are mirrored as NO rows. Coefficient is fit to market-actual residuals; runtime curve is p + coefficient*(p-.5)*abs(p-.5).",
+            "notes": "YES rows are mirrored as NO rows. Coefficient is fit to market-actual residuals; runtime curve is p + coefficient*x*(x^2-r^2), x=p-.5.",
         }
     )
 
     artifact = {
         "version": 1,
-        "table_type": "symmetric_signed_parabola_residual",
+        "table_type": "symmetric_threshold_cubic_residual",
         "allow_runtime": True,
         "coefficient": float(coefficient),
+        "sink_radius": float(args.sink_radius),
         "min_probability": float(args.min_probability),
         "backtest": report,
     }
@@ -88,6 +94,7 @@ def main() -> None:
     grid["calibrated_probability"] = _apply_curve(
         grid["market_probability"].to_numpy(dtype=float),
         coefficient,
+        args.sink_radius,
         args.min_probability,
     )
     grid["delta_points"] = grid["calibrated_probability"] - grid["market_probability"]
@@ -148,21 +155,26 @@ def _symmetrize(frame: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([yes, no], ignore_index=True)
 
 
-def _fit_coefficient(frame: pd.DataFrame) -> float:
+def _fit_coefficient(frame: pd.DataFrame, sink_radius: float) -> float:
     probability = frame["market_probability"].to_numpy(dtype=float)
     actual = frame["actual_probability"].to_numpy(dtype=float)
     centered = probability - 0.5
-    feature = centered * np.abs(centered)
+    feature = centered * ((centered * centered) - (sink_radius * sink_radius))
     target = probability - actual
     denominator = float(np.dot(feature, feature))
     if denominator <= 0.0:
         return 0.0
-    return float(np.dot(target, feature) / denominator)
+    return max(0.0, float(np.dot(target, feature) / denominator))
 
 
-def _apply_curve(probability: np.ndarray, coefficient: float, min_probability: float) -> np.ndarray:
+def _apply_curve(
+    probability: np.ndarray,
+    coefficient: float,
+    sink_radius: float,
+    min_probability: float,
+) -> np.ndarray:
     centered = probability - 0.5
-    calibrated = probability + coefficient * centered * np.abs(centered)
+    calibrated = probability + coefficient * centered * ((centered * centered) - (sink_radius * sink_radius))
     min_probability = max(0.0, min(0.01, float(min_probability)))
     return np.clip(calibrated, min_probability, 1.0 - min_probability)
 

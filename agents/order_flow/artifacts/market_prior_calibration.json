@@ -2,9 +2,9 @@
   "allow_runtime": true,
   "backtest": {
     "artifact": "agents\\order_flow\\artifacts\\market_prior_calibration.json",
-    "brier_improvement": 3.821153341138084e-05,
-    "calibrated_brier": 0.13890523522979134,
-    "coefficient": 0.007668800421782792,
+    "brier_improvement": -5.4731912742800315e-06,
+    "calibrated_brier": 0.138948919954477,
+    "coefficient": 0.016527209692109454,
     "input_dir": "data\\sector_15d",
     "mean_actual_probability": 0.5,
     "mean_calibrated_probability": 0.5,
@@ -16,13 +16,15 @@
     "n_symmetric_train": 10994,
     "n_test": 1174,
     "n_train": 5497,
-    "notes": "YES rows are mirrored as NO rows. Coefficient is fit to market-actual residuals; runtime curve is p + coefficient*(p-.5)*abs(p-.5).",
+    "notes": "YES rows are mirrored as NO rows. Coefficient is fit to market-actual residuals; runtime curve is p + coefficient*x*(x^2-r^2), x=p-.5.",
     "raw_brier": 0.13894344676320272,
+    "sink_radius": 0.3,
     "split_method": "market_disjoint_chronological",
-    "table_type": "symmetric_signed_parabola_residual"
+    "table_type": "symmetric_threshold_cubic_residual"
   },
-  "coefficient": 0.007668800421782792,
+  "coefficient": 0.016527209692109454,
   "min_probability": 0.0001,
-  "table_type": "symmetric_signed_parabola_residual",
+  "sink_radius": 0.3,
+  "table_type": "symmetric_threshold_cubic_residual",
   "version": 1
 }
